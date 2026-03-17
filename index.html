@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참가비 영수증 발급</title>
+<style>
+/* ── 기본 설정 ── */
+:root {
+  --bg: #f5f4f0;
+  --card: #ffffff;
+  --border: #d8d4cc;
+  --text: #1a1916;
+  --muted: #7a776e;
+  --accent: #1a3a5c;
+  --accent-light: #e8eef5;
+  --danger: #c0392b;
+  --success: #1a6b3a;
+  --radius: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── 조회 화면 ── */
+.lookup-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.lookup-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+.org-badge {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+.lookup-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+.lookup-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.input-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.input-wrap input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  font-family: inherit;
+  color: var(--text);
+  background: #fafaf8;
+  letter-spacing: 1px;
+  transition: border-color 0.2s;
+}
+.input-wrap input:focus { border-color: var(--accent); background: #fff; }
+.input-wrap input::placeholder { color: #bbb; letter-spacing: 0; }
+.btn-search {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+.btn-search:hover { opacity: 0.88; }
+.error-msg {
+  margin-top: 1rem;
+  font-size: 13px;
+  color: var(--danger);
+  display: none;
+}
+.lookup-footer {
+  margin-top: 1.5rem;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── 영수증 화면 ── */
+.receipt-page { display: none; }
+.receipt-toolbar {
+  background: var(--accent);
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.receipt-toolbar span { font-size: 14px; opacity: 0.85; }
+.toolbar-btns { display: flex; gap: 8px; }
+.btn-back, .btn-print {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+}
+.btn-back { background: rgba(255,255,255,0.15); color: #fff; }
+.btn-back:hover { background: rgba(255,255,255,0.25); }
+.btn-print { background: #fff; color: var(--accent); }
+.btn-print:hover { background: #eef2f7; }
+
+.receipt-container {
+  padding: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── 영수증 본지 ── */
+.receipt-paper {
+  width: 680px;
+  background: #fff;
+  border: 1.5px solid #222;
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  color: #000;
+}
+.r-serial-bar {
+  border-bottom: 1px solid #333;
+  padding: 6px 12px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.r-serial-label {
+  border: 1px solid #333;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.r-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 18px 0 14px;
+  letter-spacing: 3px;
+  border-bottom: 1px solid #333;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.r-sec-head {
+  background: #efefef;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #333;
+}
+.r-sec-head + table, .r-sec-head ~ .detail-wrap { border-top: none; }
+.r-table { width: 100%; border-collapse: collapse; }
+.r-table td {
+  padding: 7px 12px;
+  font-size: 12px;
+  border-bottom: 0.5px solid #ccc;
+  vertical-align: middle;
+}
+.r-table tr:last-child td { border-bottom: none; }
+.r-table td.lbl {
+  font-weight: 700;
+  width: 22%;
+  background: #f9f9f9;
+  border-right: 0.5px solid #ccc;
+}
+.r-table td.lbl2 {
+  font-weight: 700;
+  width: 18%;
+  background: #f9f9f9;
+  border-left: 0.5px solid #ccc;
+  border-right: 0.5px solid #ccc;
+}
+.detail-head {
+  display: grid;
+  grid-template-columns: 20% 38% 24% 18%;
+  background: #efefef;
+  border-bottom: 1px solid #333;
+}
+.detail-head span, .detail-row span {
+  padding: 6px 8px;
+  font-size: 11.5px;
+  text-align: center;
+  border-right: 0.5px solid #ccc;
+}
+.detail-head span { font-weight: 700; }
+.detail-head span:last-child, .detail-row span:last-child { border-right: none; }
+.detail-row {
+  display: grid;
+  grid-template-columns: 20% 38% 24% 18%;
+  border-bottom: 0.5px solid #ccc;
+}
+.total-row {
+  display: grid;
+  grid-template-columns: 58% 24% 18%;
+  border-bottom: 1px solid #333;
+  background: #f9f9f9;
+}
+.total-row span {
+  padding: 7px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  border-right: 0.5px solid #ccc;
+}
+.total-row span:last-child { border-right: none; }
+.r-confirm {
+  text-align: center;
+  padding: 22px 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.r-date {
+  text-align: center;
+  padding: 6px 0 12px;
+  font-size: 12px;
+}
+.r-issuer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 16px;
+  font-size: 12px;
+}
+.r-stamp {
+  width: 46px; height: 46px;
+  border: 2px solid #b00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b00;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.r-receiver {
+  text-align: right;
+  padding: 10px 16px 14px;
+  font-size: 12px;
+  border-top: 1px solid #333;
+}
+
+/* ── 인쇄 ── */
+@media print {
+  .receipt-toolbar { display: none !important; }
+  .lookup-page { display: none !important; }
+  .receipt-page { display: block !important; }
+  .receipt-container { padding: 0; }
+  .receipt-paper { border: 1.5px solid #000; width: 100%; }
+  body { background: #fff; }
+  @page { size: A4; margin: 15mm; }
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     ★ 담당자 설정 영역 — 여기만 수정하세요 ★
+     ══════════════════════════════════════════ -->
+<script>
+// ① 발행 기관 정보
+const ORG = {
+  name:   "(사)한국디지털광고협회",
+  reg:    "215-82-13855",
+  addr:   "서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층",
+  prefix: "KODA",
+  event:  "2025 협회장배 골프대회",  // 행사명 (조회 화면 안내 문구에 사용)
+};
+
+// ② 참가자 데이터 — 엑셀에서 복사 후 아래 형식으로 붙여넣기
+// 형식: { biz:"법인명", reg:"사업자번호(숫자만도 OK)", addr:"주소", detail:"세부내용", date:"YYYY-MM-DD", amount:금액, note:"비고", serial:"일련번호" }
+const PARTICIPANTS = [
+  { biz:"주식회사 레뷰코퍼레이션",  reg:"261-81-22044", addr:"서울특별시 강남구 논현로 135길 29(논현동)", detail:"골프대회 참가비", date:"2025-04-08", amount:350000, note:"1人 참가비", serial:"KODA-250408-01" },
+  { biz:"(주)샘플기업",             reg:"123-45-67890", addr:"서울시 마포구 월드컵로 10길 56",           detail:"골프대회 참가비", date:"2025-04-08", amount:350000, note:"1人 참가비", serial:"KODA-250408-02" },
+  // ← 여기에 계속 추가하세요. 마지막 줄 끝에 쉼표 주의!
+];
+</script>
+<!-- ══════════════════════════════════════════ -->
+
+
+<!-- 조회 화면 -->
+<div class="lookup-page" id="lookupPage">
+  <div class="lookup-card">
+    <div class="org-badge" id="orgBadge"></div>
+    <h1>참가비 영수증 발급</h1>
+    <p id="lookupDesc"></p>
+    <div class="input-wrap">
+      <input type="text" id="regInput" placeholder="사업자등록번호 입력 (예: 261-81-22044)"
+             maxlength="12" oninput="formatReg(this)" onkeydown="if(event.key==='Enter')lookup()" />
+    </div>
+    <button class="btn-search" onclick="lookup()">영수증 조회</button>
+    <div class="error-msg" id="errorMsg">등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요.</div>
+    <div class="lookup-footer" id="lookupFooter"></div>
+  </div>
+</div>
+
+<!-- 영수증 화면 -->
+<div class="receipt-page" id="receiptPage">
+  <div class="receipt-toolbar">
+    <span id="toolbarTitle"></span>
+    <div class="toolbar-btns">
+      <button class="btn-back" onclick="goBack()">← 다시 조회</button>
+      <button class="btn-print" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+    </div>
+  </div>
+  <div class="receipt-container">
+    <div class="receipt-paper" id="receiptPaper"></div>
+  </div>
+</div>
+
+<script>
+// 페이지 초기화
+window.onload = function() {
+  document.getElementById('orgBadge').textContent = ORG.name;
+  document.getElementById('lookupDesc').textContent =
+    ORG.event + ' 참가비 영수증을 발급받으실 수 있습니다.\n사업자등록번호를 입력해 주세요.';
+  document.getElementById('lookupFooter').innerHTML =
+    '문의: ' + ORG.name + '<br>본 페이지는 영수증 발급 전용입니다.';
+};
+
+// 사업자번호 자동 하이픈
+function formatReg(el) {
+  let v = el.value.replace(/[^0-9]/g, '');
+  if (v.length > 3 && v.length <= 5) v = v.slice(0,3) + '-' + v.slice(3);
+  else if (v.length > 5) v = v.slice(0,3) + '-' + v.slice(3,5) + '-' + v.slice(5,10);
+  el.value = v;
+}
+
+// 조회
+function lookup() {
+  const input = document.getElementById('regInput').value.replace(/-/g,'').trim();
+  const errEl = document.getElementById('errorMsg');
+  errEl.style.display = 'none';
+
+  if (!input) return;
+
+  const found = PARTICIPANTS.find(p => String(p.reg).replace(/-/g,'') === input);
+  if (!found) {
+    errEl.style.display = 'block';
+    return;
+  }
+  renderReceipt(found);
+}
+
+// 영수증 렌더링
+function renderReceipt(r) {
+  const today = new Date();
+  const todayStr = today.getFullYear() + '년 ' +
+    String(today.getMonth()+1).padStart(2,'0') + '월 ' +
+    String(today.getDate()).padStart(2,'0') + '일';
+
+  const amtFmt = Number(r.amount).toLocaleString('ko-KR');
+
+  document.getElementById('receiptPaper').innerHTML = `
+    <div class="r-serial-bar">
+      <span class="r-serial-label">일련번호</span>
+      <span>${r.serial}</span>
+    </div>
+    <div class="r-title">참가비 영수증</div>
+
+    <div class="r-sec-head">1. 납부자</div>
+    <table class="r-table">
+      <tr>
+        <td class="lbl">법 인 명</td><td>${r.biz}</td>
+        <td class="lbl2">사업자등록번호</td><td>${r.reg}</td>
+      </tr>
+      <tr><td class="lbl">주 소</td><td colspan="3">${r.addr}</td></tr>
+    </table>
+
+    <div class="r-sec-head" style="border-top:1px solid #333">2. 납부처</div>
+    <table class="r-table">
+      <tr>
+        <td class="lbl">법 인 명</td><td>${ORG.name}</td>
+        <td class="lbl2">사업자등록번호</td><td>${ORG.reg}</td>
+      </tr>
+      <tr><td class="lbl">주 소</td><td colspan="3">${ORG.addr}</td></tr>
+    </table>
+
+    <div class="r-sec-head" style="border-top:1px solid #333">3. 납부내용</div>
+    <div class="detail-head">
+      <span>연월일</span><span>세부내용</span><span>금 액</span><span>비 고</span>
+    </div>
+    <div class="detail-row">
+      <span>${r.date}</span>
+      <span>${r.detail}</span>
+      <span>${amtFmt}</span>
+      <span>${r.note || ''}</span>
+    </div>
+    <div class="total-row">
+      <span>총 계</span>
+      <span>${amtFmt}</span>
+      <span></span>
+    </div>
+
+    <div class="r-confirm">위와 같이 영수하였음을 확인합니다.</div>
+    <div class="r-date">${todayStr}</div>
+    <div class="r-issuer">
+      <span>주관처: ${ORG.name}</span>
+      <div class="r-stamp">(인)</div>
+    </div>
+    <div class="r-receiver">${r.biz} 귀하</div>
+  `;
+
+  document.getElementById('toolbarTitle').textContent = r.biz + ' 영수증';
+  document.getElementById('lookupPage').style.display = 'none';
+  document.getElementById('receiptPage').style.display = 'block';
+}
+
+function goBack() {
+  document.getElementById('lookupPage').style.display = 'flex';
+  document.getElementById('receiptPage').style.display = 'none';
+  document.getElementById('regInput').value = '';
+  document.getElementById('errorMsg').style.display = 'none';
+}
+</script>
+</body>
+</html>
