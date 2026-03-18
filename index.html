@@ -687,7 +687,7 @@ function doLookup() {
 
 function getType(amt) {
   if (amt >= 4000000) return "이사사";
-  if (amt === 3000000) return "신규";
+  if (amt === 3000000) return "입회비";
   return "일반사";
 }
 
@@ -695,7 +695,7 @@ function buildRows(pmt) {
   var amt = Number(pmt.amount);
   var type = getType(amt);
   var rows = "";
-  if (type === "신규") {
+  if (type === "입회비") {
     // 연회비 2,000,000 + 입회비 1,000,000 두 줄
     rows =
       "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>2,000,000</span><span rowspan=\"2\">" + type + "</span></div>" +
