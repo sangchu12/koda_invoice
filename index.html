@@ -706,8 +706,6 @@ function loadSettings(){
   document.getElementById('s-reg').value=o.reg||'';
   document.getElementById('s-addr').value=o.addr||'';
   document.getElementById('s-prefix').value=o.prefix||'';
-  document.getElementById('s-event').value=o.event||'';
-  document.getElementById('s-date').value=o.date||'';
   document.getElementById('s-amount').value=o.amount||'';
   document.getElementById('s-receipt-title').value=o.receiptTitle||'참가비 영수증';
   document.getElementById('s-detail').value=o.detail!==undefined?o.detail:'';
@@ -721,8 +719,6 @@ function saveSettings(){
   state.org.reg=document.getElementById('s-reg').value;
   state.org.addr=document.getElementById('s-addr').value;
   state.org.prefix=document.getElementById('s-prefix').value;
-  state.org.event=document.getElementById('s-event').value;
-  state.org.date=document.getElementById('s-date').value;
   state.org.amount=Number(document.getElementById('s-amount').value);
   state.org.receiptTitle=document.getElementById('s-receipt-title').value||'참가비 영수증';
   state.org.detail=document.getElementById('s-detail').value;
