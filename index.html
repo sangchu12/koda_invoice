@@ -687,7 +687,7 @@ function doLookup() {
 
 function getType(amt) {
   if (amt >= 4000000) return "이사사";
-  if (amt === 3000000) return "입회비";
+  if (amt === 3000000) return "신규";
   return "일반사";
 }
 
@@ -695,11 +695,11 @@ function buildRows(pmt) {
   var amt = Number(pmt.amount);
   var type = getType(amt);
   var rows = "";
-  if (type === "입회비") {
-    // 연회비 2,000,000 + 입회비 1,000,000 두 줄
+  if (type === "신규") {
+    // 연회비 2,000,000 (비고: 일반사) + 입회비 1,000,000 (비고: 입회비) 두 줄
     rows =
-      "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>2,000,000</span><span rowspan=\"2\">" + type + "</span></div>" +
-      "<div class=\"dr\"><span>" + pmt.date + "</span><span>입회비</span><span>1,000,000</span><span></span></div>";
+      "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>2,000,000</span><span>일반사</span></div>" +
+      "<div class=\"dr\"><span>" + pmt.date + "</span><span>입회비</span><span>1,000,000</span><span>입회비</span></div>";
   } else {
     rows = "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>" + amt.toLocaleString("ko-KR") + "</span><span>" + type + "</span></div>";
   }
