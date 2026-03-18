@@ -297,6 +297,7 @@ textarea.paste-box:focus{border-color:var(--accent)}
     </div>
     <button class="btn-search" onclick="lookup()">영수증 조회</button>
     <div class="error-msg" id="errorMsg"></div>
+    <div id="paymentSelectBox" style="display:none"></div>
     <div class="lookup-footer" id="lookupFooter"></div>
     <div style="margin-top:1rem">
       <button class="btn btn-sm" onclick="goMode()" style="font-size:11px;color:var(--muted);border:none;background:none">관리자 로그인</button>
@@ -651,16 +652,27 @@ function applyMatch(){
   matched.forEach(p=>{
     const idx=state.members.findIndex(m=>m.reg===p.matched.reg);
     if(idx>-1){
-      state.members[idx].paid   = true;
-      if(p.serial) state.members[idx].serial = p.serial;
-      if(p.date)   state.members[idx].date   = p.date;
-      if(p.amt)    state.members[idx].amount  = p.amt;
+      state.members[idx].paid=true;
+      if(!state.members[idx].payments) state.members[idx].payments=[];
+      const already=state.members[idx].payments.find(pmt=>pmt.serial===p.serial);
+      if(!already){
+        state.members[idx].payments.push({
+          serial: p.serial||state.members[idx].serial,
+          date:   p.date||state.members[idx].date,
+          amount: p.amt||state.members[idx].amount
+        });
+      }
+      if(state.members[idx].payments.length===1){
+        state.members[idx].serial = p.serial||state.members[idx].serial;
+        state.members[idx].date   = p.date||state.members[idx].date;
+        state.members[idx].amount = p.amt||state.members[idx].amount;
+      }
     }
   });
   save();
-  state = JSON.parse(localStorage.getItem('koda_v3'));
+  state=JSON.parse(localStorage.getItem('koda_v3'));
   renderTable();
-  alert('\u2705 '+matched.length+'\uac1c \uc5c5\uccb4 \uc785\uae08 \ucc98\ub9ac \uc644\ub8cc!');
+  alert('✅ '+matched.length+'개 업체 입금 처리 완료!');
   document.querySelectorAll('.tab-btn')[0].click();
 }
 
@@ -738,7 +750,6 @@ function formatReg(el){
   el.value=v;
 }
 function lookup(){
-  // 항상 최신 저장 데이터 로드
   const saved=localStorage.getItem('koda_v3');
   if(saved) state=JSON.parse(saved);
   const input=document.getElementById('regInput').value.replace(/-/g,'').trim();
@@ -748,7 +759,41 @@ function lookup(){
   const found=state.members.find(p=>String(p.reg).replace(/-/g,'')=== input);
   if(!found){errEl.textContent='등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요.';errEl.style.display='block';return;}
   if(!found.paid){errEl.textContent='아직 입금이 확인되지 않았습니다. 입금 후 담당자에게 문의해 주세요.';errEl.style.display='block';return;}
-  renderReceipt(found);
+  // 입금 건이 2개 이상이면 선택 화면
+  if(found.payments && found.payments.length>1){
+    showPaymentSelect(found);
+  } else {
+    renderReceipt(found);
+  }
+}
+
+function showPaymentSelect(member){
+  const errEl=document.getElementById('errorMsg');
+  errEl.style.display='none';
+  // 선택 카드 UI 생성
+  const card=document.getElementById('paymentSelectBox');
+  card.innerHTML=`
+    <div style="margin-top:1.2rem;text-align:left">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text)">입금 내역이 ${member.payments.length}건 있습니다.<br>발급할 영수증을 선택해 주세요.</div>
+      ${member.payments.map((pmt,i)=>`
+        <div onclick="selectPayment(${JSON.stringify(member).replace(/"/g,'&quot;')},${i})"
+          style="border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fafaf8;transition:border-color .15s"
+          onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:13px;font-weight:700;color:var(--accent)">${pmt.serial}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${pmt.date} &nbsp;|&nbsp; ${Number(pmt.amount).toLocaleString('ko-KR')}원</div>
+        </div>`).join('')}
+      <button onclick="document.getElementById('paymentSelectBox').innerHTML=''" style="font-size:12px;color:var(--muted);border:none;background:none;cursor:pointer;margin-top:4px">← 취소</button>
+    </div>`;
+  card.style.display='block';
+}
+
+function selectPayment(member, idx){
+  const pmt=member.payments[idx];
+  // 선택한 입금 건으로 영수증 렌더링
+  const r={...member, serial:pmt.serial, date:pmt.date, amount:pmt.amount};
+  document.getElementById('paymentSelectBox').innerHTML='';
+  document.getElementById('paymentSelectBox').style.display='none';
+  renderReceipt(r);
 }
 
 // ═══════════════ 영수증 렌더링 ═══════════════
@@ -765,7 +810,7 @@ function renderReceipt(r){
     return d;
   };
   const rcTitle=org.receiptTitle||org.title||'참가비 영수증';
-  const rcDetail=r.detail||org.detail||org.event||'';
+  const rcDetail=(org.detail!==undefined ? org.detail : (r.detail||org.event||''));
   const rcNote=org.note||'1人 참가비';
   document.getElementById('receiptPaper').innerHTML=`
     <div class="r-serial-bar"><span class="r-serial-label">일련번호</span><span>${r.serial}</span></div>
