@@ -222,9 +222,9 @@ textarea.paste-box:focus{border-color:var(--accent)}
         <div class="panel-card">
           <div class="panel-title">① 은행 입금 내역 붙여넣기</div>
           <div class="col-guide">
-            <span>A: 년도</span><span>B: 거래일시</span><span>C: 입금액</span><span>D: 내용(회사명)</span><span>E: 잔액</span><span>F: 거래점명</span><span>G: 회사명</span>
+            <span>A: 일련번호</span><span>B: 거래일시</span><span>C: 번호</span><span>D: 입금액</span><span>E: 입금자명</span><span>F: 회사명</span><span>G: 법인명</span>
           </div>
-          <textarea class="paste-box" id="bankPaste" placeholder="은행 엑셀에서 복사 후 여기에 붙여넣기...&#10;&#10;예)&#10;2026	2026.01.07 14:55:05	3,000,000	(주)이엔미디어	290,387,674	(우리)	이엔미디어	일반사"></textarea>
+          <textarea class="paste-box" id="bankPaste" placeholder="은행 엑셀에서 복사 후 여기에 붙여넣기...&#10;&#10;예)&#10;260107-01	2026-01-07	1	3,000,000	(주)이엔미디어	이엔미디어	주식회사 이엔미디어"></textarea>
           <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="matchBank()">🔍 매칭 실행</button>
         </div>
         <div class="panel-card">
@@ -239,8 +239,8 @@ textarea.paste-box:focus{border-color:var(--accent)}
       </div>
       <div style="margin-top:1rem;padding:1rem;background:var(--accent-light);border-radius:var(--radius);font-size:12px;color:var(--accent);line-height:1.8">
         <strong>💡 매칭 방식 안내</strong><br>
-        은행 내역의 <strong>G열(회사명)</strong> 또는 <strong>D열(내용)</strong>을 회원사 법인명과 비교해서 자동 매칭해요.<br>
-        매칭된 업체만 입금 처리되며, 미매칭 업체는 수동으로 처리할 수 있어요.
+        <strong>G열(법인명)</strong> → F열(회사명) → E열(입금자명) 순서로 회원사와 자동 매칭해요.<br>
+        매칭 적용 시 <strong>일련번호·거래일시·입금액</strong>이 영수증에 자동 반영됩니다.
       </div>
     </div>
 
@@ -593,18 +593,24 @@ function matchBank(){
 
   lines.forEach(line=>{
     const cols=line.split('\t');
-    if(cols.length<3)return;
-    // G열(7번째) 우선, 없으면 D열(4번째) 사용
-    const nameRaw=(cols[6]||cols[3]||'').trim();
-    const amtRaw=(cols[2]||'').trim();
+    if(cols.length<4)return;
+    // 새 형식: A=일련번호, B=거래일시, C=번호, D=입금액, E=입금자명, F=회사명, G=법인명
+    const serial=(cols[0]||'').trim();
+    const dateRaw=(cols[1]||'').trim();
+    const amtRaw=(cols[3]||'').trim();
     const amt=Number(amtRaw.replace(/,/g,''));
+    // G열(법인명) 우선, 없으면 F열(회사명) 사용
+    const nameRaw=(cols[6]||cols[5]||cols[4]||'').trim();
     if(!nameRaw||!amt)return;
+
+    // 날짜 정리 (2026-01-07 형식으로)
+    const date=dateRaw.split(' ')[0].trim();
 
     // 회원사 명단에서 매칭
     const normInput=normalize(nameRaw);
     const matched=state.members.find(m=>normalize(m.biz).includes(normInput)||normInput.includes(normalize(m.biz)));
 
-    pendingMatches.push({nameRaw,amt,matched:matched||null});
+    pendingMatches.push({serial,date,nameRaw,amt,matched:matched||null});
   });
 
   const matchedCount=pendingMatches.filter(p=>p.matched).length;
@@ -617,7 +623,11 @@ function matchBank(){
     <div class="match-item ${p.matched?'matched':'unmatched'}">
       <div>
         <div class="name">${p.nameRaw} ${p.matched?'→ <span style="opacity:.7">'+p.matched.biz+'</span>':''}</div>
-        <div class="amt">${p.amt.toLocaleString('ko-KR')}원</div>
+        <div class="amt">
+          ${p.serial?'<strong>'+p.serial+'</strong> &nbsp;':''}
+          ${p.date||''} &nbsp;
+          <strong>${p.amt.toLocaleString('ko-KR')}원</strong>
+        </div>
       </div>
       <span class="status">${p.matched?'매칭됨':'미매칭'}</span>
     </div>`).join('');
@@ -631,13 +641,18 @@ function applyMatch(){
   const matched=pendingMatches.filter(p=>p.matched);
   if(!confirm(matched.length+'개 업체를 입금 처리할까요?'))return;
   matched.forEach(p=>{
-    const idx=state.members.indexOf(p.matched);
-    if(idx>-1)state.members[idx].paid=true;
+    const idx=state.members.findIndex(m=>m.reg===p.matched.reg);
+    if(idx>-1){
+      state.members[idx].paid   = true;
+      if(p.serial) state.members[idx].serial = p.serial;
+      if(p.date)   state.members[idx].date   = p.date;
+      if(p.amt)    state.members[idx].amount  = p.amt;
+    }
   });
   save();
+  state = JSON.parse(localStorage.getItem('koda_v3'));
   renderTable();
-  alert('✅ '+matched.length+'개 업체 입금 처리 완료!');
-  // 목록 탭으로 이동
+  alert('\u2705 '+matched.length+'\uac1c \uc5c5\uccb4 \uc785\uae08 \ucc98\ub9ac \uc644\ub8cc!');
   document.querySelectorAll('.tab-btn')[0].click();
 }
 
@@ -703,6 +718,9 @@ function formatReg(el){
   el.value=v;
 }
 function lookup(){
+  // 항상 최신 저장 데이터 로드
+  const saved=localStorage.getItem('koda_v3');
+  if(saved) state=JSON.parse(saved);
   const input=document.getElementById('regInput').value.replace(/-/g,'').trim();
   const errEl=document.getElementById('errorMsg');
   errEl.style.display='none';
