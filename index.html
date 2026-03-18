@@ -244,6 +244,11 @@ textarea.pb:focus{border-color:var(--accent)}
         <div class="srow"><label>어드민 비밀번호</label><input id="set-pw" type="password" placeholder="변경 시 입력"/></div>
         <button class="btn btnp" style="margin-top:12px" id="btn-save-set">저장</button>
         <span id="set-msg" style="font-size:12px;color:var(--ok);margin-left:8px"></span>
+        <div style="margin-top:1.5rem;padding:1rem;background:var(--al);border-radius:var(--r)">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">📥 입금 처리 후 GitHub 업로드</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">입금 처리 완료 후 아래 버튼을 눌러 파일을 다운받고,<br>GitHub에 <strong>index.html</strong>로 업로드하세요.</div>
+          <button class="btn btnp" id="btn-download" style="width:100%">⬇ 최신 데이터 포함 파일 다운로드</button>
+        </div>
       </div>
     </div>
   </div>
@@ -288,6 +293,7 @@ var DEF = {
   detail: "연회비",
   note: ""
 };
+
 
 const INITIAL_MEMBERS = [
   {biz:'구글코리아(유)',reg:'120-86-65164',addr:'서울특별시 강남구 테헤란로 152 역삼동 강남파이낸스센터 22층'},
@@ -460,9 +466,7 @@ const INITIAL_MEMBERS = [
   {biz:'주식회사 히히',reg:'507-81-17393',addr:'서울특별시 강남구 강남대로128길 81, 4층'}
 ];
 
-function loadST() {
-  var r = localStorage.getItem("koda_annual");
-  if (r) return JSON.parse(r);
+function defaultST() {
   return {
     cfg: {
       name: DEF.name, reg: DEF.reg, addr: DEF.addr,
@@ -470,6 +474,10 @@ function loadST() {
     },
     payments: {}
   };
+}
+function loadST() {
+  var r = localStorage.getItem("koda_annual");
+  return r ? JSON.parse(r) : defaultST();
 }
 function saveST() { localStorage.setItem("koda_annual", JSON.stringify(ST)); }
 var ST = loadST();
@@ -487,6 +495,8 @@ function initUI() {
   document.getElementById("id-org-name").textContent = ST.cfg.name;
   document.getElementById("lk-org").textContent = ST.cfg.name;
   document.getElementById("lk-foot").textContent = "문의: " + ST.cfg.name;
+
+
 
   document.getElementById("btn-admin").onclick = function() {
     document.getElementById("pw-box").classList.remove("hidden");
@@ -520,6 +530,7 @@ function initUI() {
   document.getElementById("btn-match").onclick = doMatch;
   document.getElementById("btn-apply").onclick = doApply;
   document.getElementById("btn-save-set").onclick = saveSet;
+  document.getElementById("btn-download").onclick = downloadHTML;
 
   document.getElementById("btn-do-lookup").onclick = doLookup;
   document.getElementById("reg-inp").oninput = function() {
@@ -658,8 +669,6 @@ function saveSet() {
 }
 
 function doLookup() {
-  var fresh = localStorage.getItem("koda_annual");
-  if (fresh) ST = JSON.parse(fresh);
   var input = document.getElementById("reg-inp").value.replace(/-/g, "").trim();
   var err = document.getElementById("err-msg");
   err.style.display = "none";
@@ -683,6 +692,21 @@ function doLookup() {
   document.querySelectorAll(".rsel-item").forEach(function(el) {
     el.onclick = function() { renderReceipt(window._member, window._pmts[parseInt(el.getAttribute("data-i"))]); };
   });
+}
+
+function downloadHTML() {
+  // 현재 입금 데이터를 localStorage에 저장 후 페이지 HTML 다운로드
+  localStorage.setItem("koda_annual", JSON.stringify(ST));
+  var html = document.documentElement.outerHTML;
+  var blob = new Blob([html], {type: "text/html;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "index.html";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  alert("다운로드 완료!\n이 파일을 GitHub index.html로 업로드하세요.");
 }
 
 function getType(amt) {
