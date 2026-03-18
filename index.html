@@ -646,8 +646,7 @@ function norm(s){return s.replace(/[^a-z0-9가-힣]/gi,'').toLowerCase();}
 function matchBank(){
   var text=document.getElementById('bank-paste').value.trim();
   if(!text){alert('입금 내역을 붙여넣어 주세요.');return;}
-  var lines=text.split('
-').filter(function(l){return l.trim();});
+  var lines=text.split('\n').filter(function(l){return l.trim();});
   pendingM=[];
   var ms=members();
   lines.forEach(function(line){
@@ -691,8 +690,7 @@ function applyMatch(){
 function addExtras(){
   var text=document.getElementById('extra-paste').value.trim();
   if(!text)return;
-  var lines=text.split('
-').filter(function(l){return l.trim();});
+  var lines=text.split('\n').filter(function(l){return l.trim();});
   var added=0;
   lines.forEach(function(line){
     var c=line.split('	');
