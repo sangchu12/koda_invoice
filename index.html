@@ -244,11 +244,7 @@ textarea.pb:focus{border-color:var(--accent)}
         <div class="srow"><label>어드민 비밀번호</label><input id="set-pw" type="password" placeholder="변경 시 입력"/></div>
         <button class="btn btnp" style="margin-top:12px" id="btn-save-set">저장</button>
         <span id="set-msg" style="font-size:12px;color:var(--ok);margin-left:8px"></span>
-        <div style="margin-top:1.5rem;padding:1rem;background:var(--al);border-radius:var(--r)">
-          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">📥 입금 처리 후 GitHub 업로드</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">입금 처리 완료 후 아래 버튼을 눌러 파일을 다운받고,<br>GitHub에 <strong>index.html</strong>로 업로드하세요.</div>
-          <button class="btn btnp" id="btn-download" style="width:100%">⬇ 최신 데이터 포함 파일 다운로드</button>
-        </div>
+
       </div>
     </div>
   </div>
@@ -293,6 +289,9 @@ var DEF = {
   detail: "연회비",
   note: ""
 };
+
+var SB_URL = "https://xyfhxvhmsmurzrmwhvpb.supabase.co";
+var SB_KEY = "sb_publishable_KNAlzdsb9kflGFZgLbD-yA_FX-s7qPV";
 
 
 const INITIAL_MEMBERS = [
@@ -479,7 +478,48 @@ function loadST() {
   var r = localStorage.getItem("koda_annual");
   return r ? JSON.parse(r) : defaultST();
 }
-function saveST() { localStorage.setItem("koda_annual", JSON.stringify(ST)); }
+
+// Supabase에서 최신 데이터 불러오기
+function fetchSB(callback) {
+  fetch(SB_URL + "/rest/v1/payments?select=reg,data", {
+    headers: {
+      "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY
+    }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(rows) {
+    if (!Array.isArray(rows)) { if (callback) callback(false); return; }
+    var payments = {};
+    rows.forEach(function(row) {
+      try { payments[row.reg] = JSON.parse(row.data); } catch(e) {}
+    });
+    ST.payments = payments;
+    localStorage.setItem("koda_annual", JSON.stringify(ST));
+    if (callback) callback(true);
+  })
+  .catch(function() { if (callback) callback(false); });
+}
+
+// Supabase에 단일 업체 입금 데이터 저장 (upsert)
+function saveSB(reg, pmts, onDone) {
+  fetch(SB_URL + "/rest/v1/payments", {
+    method: "POST",
+    headers: {
+      "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "resolution=merge-duplicates"
+    },
+    body: JSON.stringify({ reg: reg, data: JSON.stringify(pmts) })
+  })
+  .then(function() { if (onDone) onDone(); })
+  .catch(function(e) { console.error("SB 저장 실패:", e); if (onDone) onDone(); });
+}
+
+function saveST() {
+  localStorage.setItem("koda_annual", JSON.stringify(ST));
+}
 var ST = loadST();
 var pendingM = [];
 
@@ -495,6 +535,12 @@ function initUI() {
   document.getElementById("id-org-name").textContent = ST.cfg.name;
   document.getElementById("lk-org").textContent = ST.cfg.name;
   document.getElementById("lk-foot").textContent = "문의: " + ST.cfg.name;
+
+  // 시작 시 Supabase에서 최신 데이터 로드
+  fetchSB(function() {
+    document.getElementById("id-org-name").textContent = ST.cfg.name;
+    document.getElementById("lk-org").textContent = ST.cfg.name;
+  });
 
 
 
@@ -530,7 +576,7 @@ function initUI() {
   document.getElementById("btn-match").onclick = doMatch;
   document.getElementById("btn-apply").onclick = doApply;
   document.getElementById("btn-save-set").onclick = saveSet;
-  document.getElementById("btn-download").onclick = downloadHTML;
+
 
   document.getElementById("btn-do-lookup").onclick = doLookup;
   document.getElementById("reg-inp").oninput = function() {
@@ -637,10 +683,19 @@ function doApply() {
     if (!dup) ST.payments[reg].push({ serial: p.serial, date: p.date, amount: p.amt });
   });
   saveST();
-  ST = JSON.parse(localStorage.getItem("koda_annual"));
-  renderTable();
-  alert("✅ " + matched.length + "개 업체 입금 처리 완료!");
-  document.querySelectorAll(".atab")[0].click();
+  // Supabase에 업체별로 저장
+  var saveCount = 0;
+  matched.forEach(function(p) {
+    var reg = p.matched.reg;
+    saveSB(reg, ST.payments[reg] || [], function() {
+      saveCount++;
+      if (saveCount === matched.length) {
+        renderTable();
+        alert("✅ " + matched.length + "개 업체 입금 처리 완료!\nSupabase에 자동 저장됐어요!");
+        document.querySelectorAll(".atab")[0].click();
+      }
+    });
+  });
 }
 
 function loadSet() {
@@ -669,6 +724,9 @@ function saveSet() {
 }
 
 function doLookup() {
+  fetchSB(function() { _doLookupCore(); });
+}
+function _doLookupCore() {
   var input = document.getElementById("reg-inp").value.replace(/-/g, "").trim();
   var err = document.getElementById("err-msg");
   err.style.display = "none";
