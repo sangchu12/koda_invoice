@@ -699,7 +699,7 @@ function buildRows(pmt) {
     // 연회비 2,000,000 (비고: 일반사) + 입회비 1,000,000 (비고: 입회비) 두 줄
     rows =
       "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>2,000,000</span><span>일반사</span></div>" +
-      "<div class=\"dr\"><span>" + pmt.date + "</span><span>입회비</span><span>1,000,000</span><span>입회비</span></div>";
+      "<div class=\"dr\"><span>" + pmt.date + "</span><span>입회비</span><span>1,000,000</span><span></span></div>";
   } else {
     rows = "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>" + amt.toLocaleString("ko-KR") + "</span><span>" + type + "</span></div>";
   }
