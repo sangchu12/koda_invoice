@@ -3,20 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>영수증 발급 시스템</title>
+<title>연회비 영수증 발급 — (사)한국디지털광고협회</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f4f0;--card:#fff;--border:#d8d4cc;--text:#1a1916;--muted:#7a776e;--accent:#1a3a5c;--al:#e8eef5;--danger:#c0392b;--ok:#1a6b3a;--okl:#edf7f1;--warn:#b45309;--warnl:#fef3e2;--r:10px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:"Noto Sans KR","Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .btn{padding:8px 16px;font-size:13px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit}
 .btn:hover{background:#f0ede8}
 .btnp{background:var(--accent);color:#fff;border-color:var(--accent)}
 .btnp:hover{opacity:.88}
-.btnd{background:var(--danger);color:#fff;border-color:var(--danger);font-size:12px;padding:4px 10px;border-radius:var(--r);cursor:pointer;font-family:inherit;border-style:solid}
 .btns{padding:4px 10px;font-size:12px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit}
-.btnadd{padding:7px 14px;font-size:12px;border:1.5px dashed var(--border);border-radius:20px;background:transparent;color:var(--muted);cursor:pointer;font-family:inherit}
-.btnadd:hover{border-color:var(--accent);color:var(--accent)}
 input,select,textarea{font-family:inherit;font-size:13px;padding:8px 10px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--card);color:var(--text);outline:none;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:700}
@@ -26,88 +23,73 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 
 /* 모드 */
 #pg-mode{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
-.mode-wrap{width:100%;max-width:460px}
-.mode-logo{text-align:center;margin-bottom:2rem}
-.mode-logo .org{font-size:13px;color:var(--muted);margin-bottom:6px}
-.mode-logo h1{font-size:22px;font-weight:700}
-.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mwrap{width:100%;max-width:440px}
+.mlogo{text-align:center;margin-bottom:2rem}
+.mlogo .org{font-size:13px;color:var(--muted);margin-bottom:6px}
+.mlogo h1{font-size:22px;font-weight:700}
+.mcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .mcard{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;cursor:pointer;text-align:center;transition:border-color .2s}
 .mcard:hover{border-color:var(--accent)}
 .mcard-icon{font-size:28px;margin-bottom:10px}
 .mcard h3{font-size:14px;font-weight:700;margin-bottom:4px}
 .mcard p{font-size:12px;color:var(--muted);line-height:1.5}
-.pw-box{margin-top:16px}
-.pw-box input{text-align:center;letter-spacing:4px;margin-bottom:8px}
-.pw-err{font-size:12px;color:var(--danger);text-align:center;margin-bottom:8px}
+.pwbox{margin-top:14px}
+.pwbox input{text-align:center;letter-spacing:4px;margin-bottom:8px}
+.pwerr{font-size:12px;color:var(--danger);text-align:center;margin-bottom:6px}
 
 /* 어드민 */
 #pg-admin{display:none;min-height:100vh}
-.adm-hdr{background:var(--accent);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.adm-hdr h2{font-size:16px;font-weight:700}
-.adm-body{padding:1.5rem;max-width:1200px;margin:0 auto}
-
-/* 행사탭 */
-.ev-tabs{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
-.ev-tab{padding:7px 16px;font-size:13px;border:0.5px solid var(--border);border-radius:20px;background:var(--card);color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s}
-.ev-tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-/* 내부탭 */
-.in-tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
-.in-tab{padding:8px 16px;font-size:13px;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
-.in-tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
-.in-panel{display:none}
-.in-panel.on{display:block}
-
-/* 통계 */
+.ahdr{background:var(--accent);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.ahdr h2{font-size:16px;font-weight:700}
+.abody{padding:1.5rem;max-width:1100px;margin:0 auto}
+.atabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.atab{padding:8px 16px;font-size:13px;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
+.atab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
+.apanel{display:none}
+.apanel.on{display:block}
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
 .stats{display:flex;gap:8px;margin-left:auto}
 .stat{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:8px 14px;text-align:center}
 .stat .n{font-size:18px;font-weight:700}
 .stat .l{font-size:11px;color:var(--muted)}
-
-/* 테이블 */
-.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.mtable{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden;border:0.5px solid var(--border)}
-.mtable th{background:#f5f4f0;padding:9px 12px;font-size:12px;font-weight:700;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.mtable td{padding:8px 12px;font-size:12px;border-bottom:0.5px solid var(--border);vertical-align:middle}
-.mtable tr:last-child td{border-bottom:none}
-.mtable tr:hover td{background:#faf9f7}
-
-/* 패널 */
+.mtbl{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden;border:0.5px solid var(--border)}
+.mtbl th{background:#f5f4f0;padding:9px 12px;font-size:12px;font-weight:700;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.mtbl td{padding:8px 12px;font-size:12px;border-bottom:0.5px solid var(--border);vertical-align:middle}
+.mtbl tr:last-child td{border-bottom:none}
+.mtbl tr:hover td{background:#faf9f7}
 .pc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:1.25rem}
 .pc-title{font-size:13px;font-weight:700;margin-bottom:10px}
-.bank-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.cguide{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.cguide span{background:var(--al);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:4px}
-textarea.pastebox{border:1.5px dashed var(--border);resize:vertical;min-height:140px;font-size:12px;font-family:monospace;line-height:1.6}
-textarea.pastebox:focus{border-color:var(--accent)}
-.mlist{margin-top:12px;max-height:280px;overflow-y:auto}
-.mitem{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:12px}
-.mitem.ok{background:var(--okl)}
-.mitem.no{background:#fdf0ee}
-.mitem .mn{font-weight:600}
-.mitem .ma{font-size:11px;color:var(--muted);margin-top:2px}
-.mitem .ms{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;white-space:nowrap}
-.mitem.ok .ms{background:#c6f0d8;color:var(--ok)}
-.mitem.no .ms{background:#fdd;color:var(--danger)}
-.applybar{margin-top:12px;display:flex;align-items:center;gap:10px}
-.egrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fg{display:flex;flex-direction:column;gap:4px}
-.fg label{font-size:12px;font-weight:600;color:var(--muted)}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.cg{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.cg span{background:var(--al);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:4px}
+textarea.pb{border:1.5px dashed var(--border);resize:vertical;min-height:130px;font-size:12px;font-family:monospace;line-height:1.6}
+textarea.pb:focus{border-color:var(--accent)}
+.mlist{margin-top:12px;max-height:260px;overflow-y:auto}
+.mi{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:12px}
+.mi.ok{background:var(--okl)}
+.mi.no{background:#fdf0ee}
+.mi .mn{font-weight:600}
+.mi .ma{font-size:11px;color:var(--muted);margin-top:2px}
+.mi .ms{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;white-space:nowrap}
+.mi.ok .ms{background:#c6f0d8;color:var(--ok)}
+.mi.no .ms{background:#fdd;color:var(--danger)}
+.abar{margin-top:12px;display:flex;align-items:center;gap:10px}
 .srow{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:center;margin-bottom:10px}
 .srow label{font-size:13px;font-weight:500}
 
 /* 조회 */
 #pg-lookup{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
-.lcard{background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:3rem 2.5rem;width:100%;max-width:460px;text-align:center}
+.lcard{background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:3rem 2.5rem;width:100%;max-width:440px;text-align:center}
 .org-badge{display:inline-block;background:var(--al);color:var(--accent);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1.5rem}
 .lcard h1{font-size:22px;font-weight:700;margin-bottom:.4rem}
 .lcard p{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.6}
-.sreg{padding:14px 16px;font-size:15px;letter-spacing:1px;background:#fafaf8;margin-bottom:10px}
-.sreg:focus{background:#fff}
+.reginput{padding:14px 16px;font-size:15px;letter-spacing:1px;background:#fafaf8;margin-bottom:10px}
+.reginput:focus{background:#fff}
 .sbtn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 .sbtn:hover{opacity:.88}
 .errmsg{margin-top:1rem;font-size:13px;color:var(--danger);display:none}
-.rsel-item{border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fafaf8;text-align:left;transition:border-color .15s}
+.rsel{margin-top:1rem;text-align:left}
+.rsel-item{border:0.5px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fafaf8;transition:border-color .15s}
 .rsel-item:hover{border-color:var(--accent);background:var(--al)}
 .rsel-title{font-size:13px;font-weight:700;color:var(--accent)}
 .rsel-sub{font-size:12px;color:var(--muted);margin-top:3px}
@@ -115,30 +97,31 @@ textarea.pastebox:focus{border-color:var(--accent)}
 
 /* 영수증 */
 #pg-receipt{display:none}
-.rtoolbar{background:var(--accent);color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.rtoolbar span{font-size:14px;opacity:.85}
-.rbtn-back{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:none;background:rgba(255,255,255,.15);color:#fff}
-.rbtn-back:hover{background:rgba(255,255,255,.25)}
-.rbtn-print{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:none;background:#fff;color:var(--accent)}
+.rtb{background:var(--accent);color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.rtb span{font-size:14px;opacity:.85}
+.rtb-btns{display:flex;gap:8px}
+.rbk{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:none;background:rgba(255,255,255,.15);color:#fff}
+.rbk:hover{background:rgba(255,255,255,.25)}
+.rpr{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:none;background:#fff;color:var(--accent)}
 .rcont{padding:2.5rem;display:flex;justify-content:center}
-.rpaper{width:680px;background:#fff;border:1.5px solid #222;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;color:#000}
+.rpaper{width:680px;background:#fff;border:1.5px solid #222;font-family:"Noto Sans KR","Malgun Gothic",sans-serif;color:#000}
 .rserial{border-bottom:1px solid #333;padding:6px 12px;font-size:11px;display:flex;align-items:center;gap:10px}
-.rserial-lbl{border:1px solid #333;padding:1px 8px;font-size:11px;font-weight:700}
+.rserial-l{border:1px solid #333;padding:1px 8px;font-size:11px;font-weight:700}
 .rtitle{text-align:center;font-size:22px;font-weight:700;padding:18px 0 14px;letter-spacing:3px;border-bottom:1px solid #333;text-decoration:underline;text-underline-offset:4px}
 .rsec{background:#efefef;padding:5px 12px;font-size:12px;font-weight:700;border-bottom:1px solid #333}
-.rtbl{width:100%;border-collapse:collapse}
-.rtbl td{padding:7px 12px;font-size:12px;border-bottom:0.5px solid #ccc;vertical-align:middle}
-.rtbl tr:last-child td{border-bottom:none}
-.rtbl td.l{font-weight:700;width:22%;background:#f9f9f9;border-right:0.5px solid #ccc}
-.rtbl td.l2{font-weight:700;width:18%;background:#f9f9f9;border-left:0.5px solid #ccc;border-right:0.5px solid #ccc}
-.dhead{display:grid;grid-template-columns:20% 38% 24% 18%;background:#efefef;border-bottom:1px solid #333}
-.dhead span,.drow span{padding:6px 8px;font-size:11.5px;text-align:center;border-right:0.5px solid #ccc}
-.dhead span{font-weight:700}
-.dhead span:last-child,.drow span:last-child{border-right:none}
-.drow{display:grid;grid-template-columns:20% 38% 24% 18%;border-bottom:0.5px solid #ccc}
-.trow{display:grid;grid-template-columns:58% 24% 18%;border-bottom:1px solid #333;background:#f9f9f9}
-.trow span{padding:7px 8px;font-size:12px;font-weight:700;text-align:center;border-right:0.5px solid #ccc}
-.trow span:last-child{border-right:none}
+.rt{width:100%;border-collapse:collapse}
+.rt td{padding:7px 12px;font-size:12px;border-bottom:0.5px solid #ccc;vertical-align:middle}
+.rt tr:last-child td{border-bottom:none}
+.rt td.l{font-weight:700;width:22%;background:#f9f9f9;border-right:0.5px solid #ccc}
+.rt td.l2{font-weight:700;width:18%;background:#f9f9f9;border-left:0.5px solid #ccc;border-right:0.5px solid #ccc}
+.dh{display:grid;grid-template-columns:20% 38% 24% 18%;background:#efefef;border-bottom:1px solid #333}
+.dh span,.dr span{padding:6px 8px;font-size:11.5px;text-align:center;border-right:0.5px solid #ccc}
+.dh span{font-weight:700}
+.dh span:last-child,.dr span:last-child{border-right:none}
+.dr{display:grid;grid-template-columns:20% 38% 24% 18%;border-bottom:0.5px solid #ccc}
+.tr{display:grid;grid-template-columns:58% 24% 18%;border-bottom:1px solid #333;background:#f9f9f9}
+.tr span{padding:7px 8px;font-size:12px;font-weight:700;text-align:center;border-right:0.5px solid #ccc}
+.tr span:last-child{border-right:none}
 .rconfirm{text-align:center;padding:22px 0 6px;font-size:14px;font-weight:700}
 .rdate{text-align:center;padding:6px 0 12px;font-size:12px}
 .rissuer{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding:8px 16px 16px;font-size:12px}
@@ -147,7 +130,7 @@ textarea.pastebox:focus{border-color:var(--accent)}
 .rreceiver{text-align:right;padding:10px 16px 14px;font-size:12px;border-top:1px solid #333}
 
 @media print{
-  #pg-mode,#pg-admin,#pg-lookup,.rtoolbar{display:none!important}
+  #pg-mode,#pg-admin,#pg-lookup,.rtb{display:none!important}
   #pg-receipt{display:block!important}
   .rcont{padding:0}
   .rpaper{border:1.5px solid #000;width:100%}
@@ -159,162 +142,135 @@ textarea.pastebox:focus{border-color:var(--accent)}
 <body>
 
 <div id="pg-mode">
-  <div class="mode-wrap">
-    <div class="mode-logo">
-      <div class="org" id="modeOrg"></div>
-      <h1>영수증 발급 시스템</h1>
+  <div class="mwrap">
+    <div class="mlogo">
+      <div class="org" id="id-org-name"></div>
+      <h1>연회비 영수증 발급</h1>
     </div>
-    <div class="mode-cards">
-      <div class="mcard" style="border-color:var(--accent)" id="btn-admin-mode">
+    <div class="mcards">
+      <div class="mcard" style="border-color:var(--accent)" id="btn-admin">
         <div class="mcard-icon">🔐</div>
         <h3>어드민</h3>
-        <p>행사 관리 및<br>입금 현황 업데이트</p>
+        <p>입금 현황 관리</p>
       </div>
-      <div class="mcard" id="btn-lookup-mode">
+      <div class="mcard" id="btn-lookup">
         <div class="mcard-icon">🧾</div>
         <h3>영수증 발급</h3>
         <p>사업자번호 입력 후<br>영수증 출력</p>
       </div>
     </div>
-    <div class="pw-box hidden" id="pw-box">
+    <div class="pwbox hidden" id="pw-box">
       <input type="password" id="pw-input" placeholder="어드민 비밀번호"/>
-      <div class="pw-err hidden" id="pw-err">비밀번호가 틀렸습니다.</div>
+      <div class="pwerr hidden" id="pw-err">비밀번호가 틀렸습니다.</div>
       <button class="btn btnp" style="width:100%" id="btn-pw-ok">확인</button>
     </div>
   </div>
 </div>
 
 <div id="pg-admin">
-  <div class="adm-hdr">
-    <h2 id="adm-title">어드민</h2>
-    <div style="display:flex;gap:8px;align-items:center">
-      <span id="cur-ev-label" style="font-size:13px;opacity:.8"></span>
-      <button class="btn" style="color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);font-size:12px" id="btn-exit-admin">← 나가기</button>
-    </div>
+  <div class="ahdr">
+    <h2>어드민 — 연회비 영수증</h2>
+    <button class="btn" style="color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);font-size:12px" id="btn-exit">← 나가기</button>
   </div>
-  <div class="adm-body">
-    <div class="ev-tabs" id="ev-tab-bar">
-      <button class="btnadd" id="btn-add-event">+ 행사 추가</button>
-    </div>
-    <div class="in-tabs">
-      <button class="in-tab on" data-panel="panel-list">📋 회원사 목록</button>
-      <button class="in-tab" data-panel="panel-bank">💰 입금 내역</button>
-      <button class="in-tab" data-panel="panel-extra">📥 비회원사 추가</button>
-      <button class="in-tab" data-panel="panel-evset">📝 행사 설정</button>
-      <button class="in-tab" data-panel="panel-gset">⚙️ 전체 설정</button>
+  <div class="abody">
+    <div class="atabs">
+      <button class="atab on" data-panel="p-list">📋 회원사 목록</button>
+      <button class="atab" data-panel="p-bank">💰 입금 내역</button>
+      <button class="atab" data-panel="p-set">⚙️ 설정</button>
     </div>
 
-    <div class="in-panel on" id="panel-list">
+    <div class="apanel on" id="p-list">
       <div class="toolbar">
-        <input type="text" id="search-inp" placeholder="회사명 또는 사업자번호 검색..." style="max-width:220px"/>
-        <select id="filter-paid" style="width:110px">
+        <input type="text" id="s-search" placeholder="회사명 또는 사업자번호 검색..." style="max-width:220px"/>
+        <select id="s-filter" style="width:110px">
           <option value="all">전체</option>
           <option value="paid">입금완료</option>
           <option value="unpaid">미입금</option>
         </select>
-        <button class="btns" id="btn-reset-paid">입금 초기화</button>
+        <button class="btns" id="btn-reset">입금 전체 초기화</button>
         <div class="stats">
-          <div class="stat"><div class="n" id="stat-total">0</div><div class="l">전체</div></div>
-          <div class="stat"><div class="n" id="stat-paid" style="color:var(--ok)">0</div><div class="l">입금완료</div></div>
-          <div class="stat"><div class="n" id="stat-unpaid" style="color:var(--warn)">0</div><div class="l">미입금</div></div>
+          <div class="stat"><div class="n" id="st-total">0</div><div class="l">전체</div></div>
+          <div class="stat"><div class="n" id="st-paid" style="color:var(--ok)">0</div><div class="l">입금완료</div></div>
+          <div class="stat"><div class="n" id="st-unpaid" style="color:var(--warn)">0</div><div class="l">미입금</div></div>
         </div>
       </div>
-      <table class="mtable">
-        <thead><tr><th style="width:36px">No</th><th>법인명</th><th style="width:130px">사업자등록번호</th><th>주소</th><th style="width:90px;text-align:center">입금여부</th></tr></thead>
-        <tbody id="member-tbody"></tbody>
+      <table class="mtbl">
+        <thead><tr>
+          <th style="width:36px">No</th>
+          <th>법인명</th>
+          <th style="width:130px">사업자등록번호</th>
+          <th>주소</th>
+          <th style="width:90px;text-align:center">입금여부</th>
+        </tr></thead>
+        <tbody id="m-tbody"></tbody>
       </table>
     </div>
 
-    <div class="in-panel" id="panel-bank">
-      <div class="bank-grid">
+    <div class="apanel" id="p-bank">
+      <div class="bgrid">
         <div class="pc">
           <div class="pc-title">① 은행 입금 내역 붙여넣기</div>
-          <div class="cguide"><span>A: 일련번호</span><span>B: 거래일시</span><span>C: 번호</span><span>D: 입금액</span><span>E: 입금자명</span><span>F: 회사명</span><span>G: 법인명</span></div>
-          <textarea class="pastebox" id="bank-paste" placeholder="은행 엑셀에서 복사 후 붙여넣기&#10;&#10;예) 260107-01	2026-01-07	1	3,000,000	(주)이엔미디어	이엔미디어	주식회사 이엔미디어"></textarea>
+          <div class="cg">
+            <span>A: 일련번호</span><span>B: 거래일시</span><span>C: 번호</span>
+            <span>D: 입금액</span><span>E: 입금자명</span><span>F: 회사명</span><span>G: 법인명</span>
+          </div>
+          <textarea class="pb" id="bank-txt" placeholder="예) 260107-01&#9;2026-01-07&#9;1&#9;3,000,000&#9;(주)이엔미디어&#9;이엔미디어&#9;주식회사 이엔미디어"></textarea>
           <button class="btn btnp" style="margin-top:10px;width:100%" id="btn-match">🔍 매칭 실행</button>
         </div>
         <div class="pc">
           <div class="pc-title">② 매칭 결과</div>
-          <div id="match-summary" style="font-size:12px;color:var(--muted);margin-bottom:8px">입금 내역을 붙여넣고 매칭 실행을 눌러주세요.</div>
+          <div id="match-sum" style="font-size:12px;color:var(--muted);margin-bottom:8px">입금 내역을 붙여넣고 매칭 실행을 눌러주세요.</div>
           <div class="mlist" id="match-list"></div>
-          <div class="applybar hidden" id="apply-bar">
+          <div class="abar hidden" id="apply-bar">
             <button class="btn btnp" id="btn-apply">✅ 입금 처리 적용</button>
             <span style="font-size:12px;color:var(--muted)" id="apply-note"></span>
           </div>
         </div>
       </div>
       <div style="margin-top:1rem;padding:1rem;background:var(--al);border-radius:var(--r);font-size:12px;color:var(--accent);line-height:1.8">
-        <strong>💡</strong> G열(법인명) → F열(회사명) 순으로 매칭해요. 매칭 적용 시 <strong>현재 선택된 행사</strong>에 반영됩니다.
+        <strong>💡</strong> G열(법인명) → F열(회사명) 순으로 매칭해요. 일련번호·날짜·금액이 영수증에 자동 반영됩니다.
       </div>
     </div>
 
-    <div class="in-panel" id="panel-extra">
-      <div class="pc" style="max-width:700px">
-        <div class="pc-title">비회원사 추가</div>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:12px">기본 회원사에 없는 업체를 추가해요. 모든 행사에서 공유됩니다.</p>
-        <div class="cguide" style="margin-bottom:10px"><span>A: 법인명</span><span>B: 사업자번호</span><span>C: 주소</span></div>
-        <textarea class="pastebox" id="extra-paste" style="min-height:100px" placeholder="추가할 업체 정보를 붙여넣으세요..."></textarea>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-          <button class="btn btnp" id="btn-add-extra">추가</button>
-          <span id="extra-result" style="font-size:12px;color:var(--ok)"></span>
-        </div>
-        <div style="margin-top:1rem" id="extra-list"></div>
-      </div>
-    </div>
-
-    <div class="in-panel" id="panel-evset">
-      <div class="pc" style="max-width:560px">
-        <div class="pc-title" id="evset-title">행사 설정</div>
-        <div class="egrid">
-          <div class="fg"><label>행사명</label><input id="es-name"/></div>
-          <div class="fg"><label>영수증 제목</label><input id="es-rtitle"/></div>
-          <div class="fg"><label>세부내용</label><input id="es-detail" placeholder="비워두면 공란"/></div>
-          <div class="fg"><label>비고</label><input id="es-note" placeholder="비워두면 공란"/></div>
-          <div class="fg"><label>기본 참가비 (원)</label><input id="es-amount" type="number"/></div>
-          <div class="fg"><label>일련번호 접두어</label><input id="es-prefix"/></div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:14px;align-items:center">
-          <button class="btn btnp" id="btn-save-evset">저장</button>
-          <span id="evset-msg" style="font-size:12px;color:var(--ok)"></span>
-          <button class="btnd" id="btn-del-event" style="margin-left:auto">이 행사 삭제</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="in-panel" id="panel-gset">
+    <div class="apanel" id="p-set">
       <div class="pc" style="max-width:500px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:1rem">발행 기관 정보 — 모든 영수증에 공통 표시됩니다.</p>
-        <div class="srow"><label>기관명</label><input id="gs-name"/></div>
-        <div class="srow"><label>사업자등록번호</label><input id="gs-reg"/></div>
-        <div class="srow"><label>주소</label><input id="gs-addr"/></div>
-        <div class="srow"><label>어드민 비밀번호</label><input id="gs-pw" type="password" placeholder="변경 시 입력"/></div>
-        <button class="btn btnp" style="margin-top:12px" id="btn-save-gset">저장</button>
-        <span id="gset-msg" style="font-size:12px;color:var(--ok);margin-left:8px"></span>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1rem">모든 영수증에 공통으로 표시됩니다.</p>
+        <div class="srow"><label>영수증 제목</label><input id="set-rtitle"/></div>
+        <div class="srow"><label>세부내용</label><input id="set-detail" placeholder="비워두면 공란"/></div>
+        <div class="srow"><label>비고</label><input id="set-note" placeholder="비워두면 공란"/></div>
+        <div class="srow"><label>기관명</label><input id="set-name"/></div>
+        <div class="srow"><label>사업자등록번호</label><input id="set-reg"/></div>
+        <div class="srow"><label>주소</label><input id="set-addr"/></div>
+        <div class="srow"><label>어드민 비밀번호</label><input id="set-pw" type="password" placeholder="변경 시 입력"/></div>
+        <button class="btn btnp" style="margin-top:12px" id="btn-save-set">저장</button>
+        <span id="set-msg" style="font-size:12px;color:var(--ok);margin-left:8px"></span>
       </div>
     </div>
   </div>
 </div>
 
-<div id="pg-lookup" style="display:flex">
+<div id="pg-lookup" style="display:none">
   <div class="lcard">
-    <div class="org-badge" id="lookup-org"></div>
-    <h1>영수증 발급</h1>
-    <p>사업자등록번호를 입력하면<br>입금된 영수증을 확인할 수 있습니다.</p>
-    <input type="text" class="sreg" id="reg-input" placeholder="사업자등록번호 (예: 261-81-22044)" maxlength="12"/>
-    <button class="sbtn" id="btn-lookup">영수증 조회</button>
+    <div class="org-badge" id="lk-org"></div>
+    <h1>연회비 영수증 발급</h1>
+    <p>사업자등록번호를 입력하면<br>영수증을 확인할 수 있습니다.</p>
+    <input type="text" class="reginput" id="reg-inp" placeholder="사업자등록번호 (예: 261-81-22044)" maxlength="12"/>
+    <button class="sbtn" id="btn-do-lookup">영수증 조회</button>
     <div class="errmsg" id="err-msg"></div>
     <div id="rsel-area"></div>
-    <div class="lfoot" id="lookup-foot"></div>
-    <div style="margin-top:1rem"><button class="btns" style="font-size:11px;color:var(--muted);border:none;background:none" id="btn-to-admin">관리자 로그인</button></div>
+    <div class="lfoot" id="lk-foot"></div>
+    <div style="margin-top:1rem">
+      <button class="btns" style="font-size:11px;color:var(--muted);border:none;background:none" id="btn-to-mode">관리자 로그인</button>
+    </div>
   </div>
 </div>
 
 <div id="pg-receipt">
-  <div class="rtoolbar">
-    <span id="r-toolbar-title"></span>
-    <div style="display:flex;gap:8px">
-      <button class="rbtn-back" id="btn-back-lookup">← 다시 조회</button>
-      <button class="rbtn-print" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+  <div class="rtb">
+    <span id="r-title-bar"></span>
+    <div class="rtb-btns">
+      <button class="rbk" id="btn-back">← 다시 조회</button>
+      <button class="rpr" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
     </div>
   </div>
   <div class="rcont"><div class="rpaper" id="r-paper"></div></div>
@@ -323,18 +279,20 @@ textarea.pastebox:focus{border-color:var(--accent)}
 <script>
 var STAMP = "data:image/png;base64,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";
 
-var DEF_GLOBAL = {name:'(사)한국디지털광고협회',reg:'215-82-13855',addr:'서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층',pw:'koda1234'};
-var DEF_EVENTS = [
-  {id:'e1',name:'연회비',rtitle:'연회비 영수증',detail:'연회비',note:'',amount:0,prefix:'KODA',payments:{}},
-  {id:'e2',name:'골프대회',rtitle:'골프대회 참가비 영수증',detail:'골프대회 참가비',note:'1人 참가비',amount:350000,prefix:'KODA',payments:{}},
-  {id:'e3',name:'디지털광고대상',rtitle:'디지털광고대상 영수증',detail:'디지털광고대상 참가비',note:'',amount:0,prefix:'KODA',payments:{}},
-  {id:'e4',name:'트로피',rtitle:'디지털광고대상 추가 트로피 영수증',detail:'추가 트로피',note:'',amount:0,prefix:'KODA',payments:{}}
-];
+var DEF = {
+  name: "(사)한국디지털광고협회",
+  reg: "215-82-13855",
+  addr: "서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층",
+  pw: "koda1234",
+  rtitle: "연회비 영수증",
+  detail: "연회비",
+  note: ""
+};
 
-var BASE = [
+const INITIAL_MEMBERS = [
   {biz:'구글코리아(유)',reg:'120-86-65164',addr:'서울특별시 강남구 테헤란로 152 역삼동 강남파이낸스센터 22층'},
   {biz:'그랑몬스터㈜',reg:'220-88-04194',addr:'서울특별시 강남구 삼성로 511 골든타워 5층'},
-  {biz:'㈜그루컴퍼니',reg:'220-88-80926',addr:'서울특별시 성동구 성수이로 10길 14, 에이스하이엔드성수타워'},
+  {biz:'㈜그루컴퍼니',reg:'220-88-80926',addr:'서울특별시 성동구 성수이로 10길 14, 에이스하이엔드성수타워 1201,1202,1203호'},
   {biz:'㈜나무커뮤니케이션',reg:'120-86-46264',addr:'서울특별시 송파구 중대로 135, 13층 서관 1301호'},
   {biz:'주식회사 케이티나스미디어',reg:'220-81-80363',addr:'서울특별시 강남구 도곡로1길 14, 3층 4층, 5층'},
   {biz:'네이버㈜',reg:'220-81-62517',addr:'경기도 성남시 분당구 정자일로 95'},
@@ -395,7 +353,7 @@ var BASE = [
   {biz:'㈜에이치에스애드',reg:'105-81-29368',addr:'서울특별시 마포구 마포대로 155 LG마포빌딩'},
   {biz:'주식회사 엔비티',reg:'211-88-83652',addr:'서울특별시 강남구 논현로 145길 31'},
   {biz:'엔에이치엔애드㈜',reg:'144-81-27690',addr:'경기도 성남시 분당구 대왕판교로645번길 16, NHN 플레이뮤지엄 5층'},
-  {biz:'㈜엔에이치엔에이스',reg:'313-81-35670',addr:'경기도 성남시 분당구 대왕판교로 645번길 16, NHN ACE'},
+  {biz:'㈜엔에이치엔에이스',reg:'313-81-35670',addr:'경기도 성남시 분당구 대왕판교로 645번길 16, 플레이뮤지엄 NHN ACE'},
   {biz:'㈜엘지씨엔에스',reg:'116-81-19477',addr:'서울특별시 강서구 마곡중앙8로 71'},
   {biz:'㈜엠코퍼레이션',reg:'534-87-00616',addr:'서울특별시 강남구 논현로 503, 12층'},
   {biz:'주식회사 엠투디지털',reg:'102-81-43774',addr:'서울특별시 용산구 한강대로 372 KDB생명타워 13층'},
@@ -450,7 +408,7 @@ var BASE = [
   {biz:'㈜피알원',reg:'110-81-75199',addr:'서울특별시 서대문구 충정로 70, 19층'},
   {biz:'㈜픽스다인무브먼트',reg:'893-87-02148',addr:'서울특별시 강남구 테헤란로 501, 6층 601호'},
   {biz:'㈜하나애드아이엠씨',reg:'117-81-48164',addr:'서울특별시 영등포구 여의도동 17-3 삼환까뮤빌딩 2층'},
-  {biz:'페리온',reg:'캐나다법인',addr:'서울특별시 강남구 영동대로 417 오토웨이타워'},
+  {biz:'페리온',reg:'캐나다 법인',addr:'서울특별시 강남구 영동대로 417 오토웨이타워'},
   {biz:'주식회사 오피엠에스',reg:'220-87-03688',addr:'서울특별시 강남구 역삼로 555, 1층 101호'},
   {biz:'㈜함샤우트글로벌',reg:'882-86-01894',addr:'서울특별시 마포구 포은로2가길 57, 한울빌딩'},
   {biz:'㈜휴먼미디어그룹',reg:'736-81-00321',addr:'경기도 부천시 길주로 279, 서호빌딩 601호'},
@@ -502,309 +460,280 @@ var BASE = [
   {biz:'주식회사 히히',reg:'507-81-17393',addr:'서울특별시 강남구 강남대로128길 81, 4층'}
 ];
 
-// 상태
-function loadSt(){var r=localStorage.getItem('kodaM');return r?JSON.parse(r):{global:Object.assign({},DEF_GLOBAL),events:DEF_EVENTS.map(function(e){return Object.assign({},e,{payments:{}});}),extras:[]};}
-function saveSt(){localStorage.setItem('kodaM',JSON.stringify(ST));}
-var ST=loadSt();
-var curEv=0;
-function ev(){return ST.events[curEv];}
-function members(){return BASE.concat(ST.extras);}
-
-// 페이지 전환
-function show(id){['pg-mode','pg-admin','pg-lookup','pg-receipt'].forEach(function(p){document.getElementById(p).style.display='none';});document.getElementById(id).style.display=(id==='pg-lookup'||id==='pg-mode')?'flex':'block';}
-
-// 이벤트 바인딩 (DOMContentLoaded)
-document.addEventListener('DOMContentLoaded',function(){
-  document.getElementById('modeOrg').textContent=ST.global.name;
-  document.getElementById('lookup-org').textContent=ST.global.name;
-  document.getElementById('lookup-foot').textContent='문의: '+ST.global.name;
-
-  // 모드 선택
-  document.getElementById('btn-admin-mode').onclick=function(){
-    document.getElementById('pw-box').classList.remove('hidden');
-    document.getElementById('pw-input').focus();
+function loadST() {
+  var r = localStorage.getItem("koda_annual");
+  if (r) return JSON.parse(r);
+  return {
+    cfg: {
+      name: DEF.name, reg: DEF.reg, addr: DEF.addr,
+      pw: DEF.pw, rtitle: DEF.rtitle, detail: DEF.detail, note: DEF.note
+    },
+    payments: {}
   };
-  document.getElementById('btn-lookup-mode').onclick=function(){show('pg-lookup');};
-  document.getElementById('btn-pw-ok').onclick=checkPw;
-  document.getElementById('pw-input').onkeydown=function(e){if(e.key==='Enter')checkPw();};
+}
+function saveST() { localStorage.setItem("koda_annual", JSON.stringify(ST)); }
+var ST = loadST();
+var pendingM = [];
 
-  // 어드민
-  document.getElementById('btn-exit-admin').onclick=function(){show('pg-mode');document.getElementById('pw-box').classList.add('hidden');document.getElementById('pw-input').value='';};
-  document.getElementById('btn-add-event').onclick=addEvent;
-  document.getElementById('btn-reset-paid').onclick=resetPaid;
-  document.getElementById('btn-match').onclick=matchBank;
-  document.getElementById('btn-apply').onclick=applyMatch;
-  document.getElementById('btn-add-extra').onclick=addExtras;
-  document.getElementById('btn-save-evset').onclick=saveEvSet;
-  document.getElementById('btn-del-event').onclick=delEvent;
-  document.getElementById('btn-save-gset').onclick=saveGSet;
-  document.getElementById('search-inp').oninput=renderTable;
-  document.getElementById('filter-paid').onchange=renderTable;
+function show(id) {
+  ["pg-mode","pg-admin","pg-lookup","pg-receipt"].forEach(function(p) {
+    document.getElementById(p).style.display = "none";
+  });
+  var el = document.getElementById(id);
+  el.style.display = (id === "pg-lookup" || id === "pg-mode") ? "flex" : "block";
+}
 
-  // 내부 탭
-  document.querySelectorAll('.in-tab').forEach(function(btn){
-    btn.onclick=function(){
-      document.querySelectorAll('.in-tab').forEach(function(b){b.classList.remove('on');});
-      document.querySelectorAll('.in-panel').forEach(function(p){p.classList.remove('on');});
-      btn.classList.add('on');
-      document.getElementById(btn.getAttribute('data-panel')).classList.add('on');
+function initUI() {
+  document.getElementById("id-org-name").textContent = ST.cfg.name;
+  document.getElementById("lk-org").textContent = ST.cfg.name;
+  document.getElementById("lk-foot").textContent = "문의: " + ST.cfg.name;
+
+  document.getElementById("btn-admin").onclick = function() {
+    document.getElementById("pw-box").classList.remove("hidden");
+    document.getElementById("pw-input").focus();
+  };
+  document.getElementById("btn-lookup").onclick = function() { show("pg-lookup"); };
+  document.getElementById("btn-pw-ok").onclick = checkPw;
+  document.getElementById("pw-input").onkeydown = function(e) { if (e.key === "Enter") checkPw(); };
+  document.getElementById("btn-exit").onclick = function() {
+    show("pg-mode");
+    document.getElementById("pw-box").classList.add("hidden");
+    document.getElementById("pw-input").value = "";
+    document.getElementById("pw-err").classList.add("hidden");
+  };
+
+  document.querySelectorAll(".atab").forEach(function(btn) {
+    btn.onclick = function() {
+      document.querySelectorAll(".atab").forEach(function(b) { b.classList.remove("on"); });
+      document.querySelectorAll(".apanel").forEach(function(p) { p.classList.remove("on"); });
+      btn.classList.add("on");
+      document.getElementById(btn.getAttribute("data-panel")).classList.add("on");
     };
   });
 
-  // 조회
-  document.getElementById('btn-lookup').onclick=lookup;
-  document.getElementById('reg-input').onkeydown=function(e){if(e.key==='Enter')lookup();};
-  document.getElementById('reg-input').oninput=function(){
-    var v=this.value.replace(/[^0-9]/g,'');
-    if(v.length>3&&v.length<=5)v=v.slice(0,3)+'-'+v.slice(3);
-    else if(v.length>5)v=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5,10);
-    this.value=v;
+  document.getElementById("s-search").oninput = renderTable;
+  document.getElementById("s-filter").onchange = renderTable;
+  document.getElementById("btn-reset").onclick = function() {
+    if (!confirm("입금 현황을 전체 초기화할까요?")) return;
+    ST.payments = {}; saveST(); renderTable();
   };
-  document.getElementById('btn-to-admin').onclick=function(){show('pg-mode');};
-  document.getElementById('btn-back-lookup').onclick=function(){document.getElementById('rsel-area').innerHTML='';document.getElementById('err-msg').style.display='none';document.getElementById('reg-input').value='';show('pg-lookup');};
+  document.getElementById("btn-match").onclick = doMatch;
+  document.getElementById("btn-apply").onclick = doApply;
+  document.getElementById("btn-save-set").onclick = saveSet;
 
-  renderEvTabs();
-  switchEv(0);
-  loadGSet();
-});
+  document.getElementById("btn-do-lookup").onclick = doLookup;
+  document.getElementById("reg-inp").oninput = function() {
+    var v = this.value.replace(/[^0-9]/g, "");
+    if (v.length > 3 && v.length <= 5) v = v.slice(0,3) + "-" + v.slice(3);
+    else if (v.length > 5) v = v.slice(0,3) + "-" + v.slice(3,5) + "-" + v.slice(5,10);
+    this.value = v;
+  };
+  document.getElementById("reg-inp").onkeydown = function(e) { if (e.key === "Enter") doLookup(); };
+  document.getElementById("btn-to-mode").onclick = function() { show("pg-mode"); };
+  document.getElementById("btn-back").onclick = function() {
+    document.getElementById("rsel-area").innerHTML = "";
+    document.getElementById("err-msg").style.display = "none";
+    document.getElementById("reg-inp").value = "";
+    show("pg-lookup");
+  };
 
-function checkPw(){
-  if(document.getElementById('pw-input').value===ST.global.pw){
-    document.getElementById('pw-box').classList.add('hidden');
-    document.getElementById('pw-err').classList.add('hidden');
-    show('pg-admin');
-    renderEvTabs();switchEv(0);loadGSet();
-  }else{
-    document.getElementById('pw-err').classList.remove('hidden');
+  loadSet();
+}
+
+function checkPw() {
+  if (document.getElementById("pw-input").value === ST.cfg.pw) {
+    document.getElementById("pw-box").classList.add("hidden");
+    document.getElementById("pw-err").classList.add("hidden");
+    show("pg-admin");
+    renderTable();
+  } else {
+    document.getElementById("pw-err").classList.remove("hidden");
   }
 }
 
-// 행사 탭
-function renderEvTabs(){
-  var bar=document.getElementById('ev-tab-bar');
-  var html=ST.events.map(function(e,i){
-    return '<button class="ev-tab'+(i===curEv?' on':'')+'" data-idx="'+i+'">'+e.name+'</button>';
-  }).join('');
-  html+='<button class="btnadd" id="btn-add-event">+ 행사 추가</button>';
-  bar.innerHTML=html;
-  bar.querySelectorAll('.ev-tab').forEach(function(btn){
-    btn.onclick=function(){switchEv(parseInt(btn.getAttribute('data-idx')));};
+function renderTable() {
+  var q = document.getElementById("s-search").value.toLowerCase();
+  var f = document.getElementById("s-filter").value;
+  var filtered = INITIAL_MEMBERS.filter(function(m) {
+    var paid = !!(ST.payments[m.reg] && ST.payments[m.reg].length > 0);
+    var mq = !q || m.biz.toLowerCase().indexOf(q) > -1 || m.reg.indexOf(q) > -1;
+    var mf = f === "all" || (f === "paid" && paid) || (f === "unpaid" && !paid);
+    return mq && mf;
   });
-  document.getElementById('btn-add-event').onclick=addEvent;
+  var paid = INITIAL_MEMBERS.filter(function(m) {
+    return !!(ST.payments[m.reg] && ST.payments[m.reg].length > 0);
+  }).length;
+  document.getElementById("st-total").textContent = INITIAL_MEMBERS.length;
+  document.getElementById("st-paid").textContent = paid;
+  document.getElementById("st-unpaid").textContent = INITIAL_MEMBERS.length - paid;
+  document.getElementById("m-tbody").innerHTML = filtered.map(function(m, i) {
+    var p = !!(ST.payments[m.reg] && ST.payments[m.reg].length > 0);
+    var cnt = ST.payments[m.reg] ? ST.payments[m.reg].length : 0;
+    return "<tr><td style=\"color:var(--muted);text-align:center\">" + (INITIAL_MEMBERS.indexOf(m)+1) + "</td>" +
+      "<td style=\"font-weight:500\">" + m.biz + "</td>" +
+      "<td style=\"font-family:monospace;font-size:11px\">" + m.reg + "</td>" +
+      "<td style=\"color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">" + m.addr + "</td>" +
+      "<td style=\"text-align:center\"><span class=\"badge " + (p?"b-ok":"b-warn") + "\">" + (p ? "입금완료" + (cnt>1?" ("+cnt+"건)":"") : "미입금") + "</span></td></tr>";
+  }).join("");
 }
-function switchEv(idx){
-  curEv=idx;
-  renderEvTabs();
-  document.getElementById('cur-ev-label').textContent='['+ev().name+']';
+
+function norm(s) { return s.replace(/[^a-z0-9가-힣]/gi, "").toLowerCase(); }
+
+function doMatch() {
+  var text = document.getElementById("bank-txt").value.trim();
+  if (!text) { alert("입금 내역을 붙여넣어 주세요."); return; }
+  var lines = text.split("\n").filter(function(l) { return l.trim(); });
+  pendingM = [];
+  lines.forEach(function(line) {
+    var c = line.split("\t");
+    if (c.length < 4) return;
+    var serial = (c[0] || "").trim();
+    var date = (c[1] || "").trim().split(" ")[0];
+    var amt = Number((c[3] || "").replace(/,/g, ""));
+    var nameRaw = (c[6] || c[5] || c[4] || "").trim();
+    if (!nameRaw || !amt) return;
+    var ni = norm(nameRaw);
+    var matched = null;
+    for (var i = 0; i < INITIAL_MEMBERS.length; i++) {
+      if (norm(INITIAL_MEMBERS[i].biz).indexOf(ni) > -1 || ni.indexOf(norm(INITIAL_MEMBERS[i].biz)) > -1) {
+        matched = INITIAL_MEMBERS[i]; break;
+      }
+    }
+    pendingM.push({ serial: serial, date: date, nameRaw: nameRaw, amt: amt, matched: matched });
+  });
+  var mc = pendingM.filter(function(p) { return p.matched; }).length;
+  document.getElementById("match-sum").innerHTML =
+    "총 <strong>" + pendingM.length + "건</strong> 중 " +
+    "<span style=\"color:var(--ok);font-weight:700\">" + mc + "건 매칭</span>, " +
+    "<span style=\"color:var(--danger);font-weight:700\">" + (pendingM.length-mc) + "건 미매칭</span>";
+  document.getElementById("match-list").innerHTML = pendingM.map(function(p) {
+    return "<div class=\"mi " + (p.matched?"ok":"no") + "\"><div>" +
+      "<div class=\"mn\">" + p.nameRaw + (p.matched ? " → " + p.matched.biz : "") + "</div>" +
+      "<div class=\"ma\">" + p.serial + " | " + p.date + " | <strong>" + p.amt.toLocaleString("ko-KR") + "원</strong></div>" +
+      "</div><span class=\"ms\">" + (p.matched?"매칭됨":"미매칭") + "</span></div>";
+  }).join("");
+  document.getElementById("apply-bar").classList.remove("hidden");
+  document.getElementById("apply-note").textContent = mc + "개 업체 입금 처리됩니다.";
+}
+
+function doApply() {
+  var matched = pendingM.filter(function(p) { return p.matched; });
+  if (!confirm(matched.length + "개 업체를 입금 처리할까요?")) return;
+  matched.forEach(function(p) {
+    var reg = p.matched.reg;
+    if (!ST.payments[reg]) ST.payments[reg] = [];
+    var dup = ST.payments[reg].filter(function(x) { return x.serial === p.serial; }).length > 0;
+    if (!dup) ST.payments[reg].push({ serial: p.serial, date: p.date, amount: p.amt });
+  });
+  saveST();
+  ST = JSON.parse(localStorage.getItem("koda_annual"));
   renderTable();
-  loadEvSet();
-  renderExtras();
-}
-function addEvent(){
-  var name=prompt('새 행사명을 입력하세요:');
-  if(!name)return;
-  ST.events.push({id:'e'+Date.now(),name:name,rtitle:name+' 영수증',detail:name,note:'',amount:0,prefix:'KODA',payments:{}});
-  saveSt();switchEv(ST.events.length-1);
-}
-function delEvent(){
-  if(ST.events.length<=1){alert('행사가 1개 이상 있어야 합니다.');return;}
-  if(!confirm('"'+ev().name+'" 행사를 삭제할까요?'))return;
-  ST.events.splice(curEv,1);saveSt();switchEv(0);
+  alert("✅ " + matched.length + "개 업체 입금 처리 완료!");
+  document.querySelectorAll(".atab")[0].click();
 }
 
-// 회원사 테이블
-function renderTable(){
-  var q=document.getElementById('search-inp').value.toLowerCase();
-  var f=document.getElementById('filter-paid').value;
-  var ms=members();
-  var filtered=ms.filter(function(m){
-    var paid=!!(ev().payments&&ev().payments[m.reg]&&ev().payments[m.reg].length>0);
-    var mq=!q||m.biz.toLowerCase().indexOf(q)>-1||m.reg.indexOf(q)>-1;
-    var mf=f==='all'||(f==='paid'&&paid)||(f==='unpaid'&&!paid);
-    return mq&&mf;
-  });
-  var tbody=document.getElementById('member-tbody');
-  tbody.innerHTML=filtered.map(function(m,i){
-    var paid=!!(ev().payments&&ev().payments[m.reg]&&ev().payments[m.reg].length>0);
-    var cnt=ev().payments&&ev().payments[m.reg]?ev().payments[m.reg].length:0;
-    return '<tr><td style="color:var(--muted);text-align:center">'+(ms.indexOf(m)+1)+'</td><td style="font-weight:500">'+m.biz+'</td><td style="font-family:monospace;font-size:11px">'+m.reg+'</td><td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+m.addr+'</td><td style="text-align:center"><span class="badge '+(paid?'b-ok':'b-warn')+'">'+(paid?'입금완료'+(cnt>1?' ('+cnt+'건)':''):'미입금')+'</span></td></tr>';
-  }).join('');
-  var total=ms.length;
-  var paid=ms.filter(function(m){return !!(ev().payments&&ev().payments[m.reg]&&ev().payments[m.reg].length>0);}).length;
-  document.getElementById('stat-total').textContent=total;
-  document.getElementById('stat-paid').textContent=paid;
-  document.getElementById('stat-unpaid').textContent=total-paid;
+function loadSet() {
+  document.getElementById("set-rtitle").value = ST.cfg.rtitle || "";
+  document.getElementById("set-detail").value = ST.cfg.detail || "";
+  document.getElementById("set-note").value = ST.cfg.note || "";
+  document.getElementById("set-name").value = ST.cfg.name || "";
+  document.getElementById("set-reg").value = ST.cfg.reg || "";
+  document.getElementById("set-addr").value = ST.cfg.addr || "";
 }
-function resetPaid(){
-  if(!confirm('"'+ev().name+'" 행사의 입금 내역을 전체 초기화할까요?'))return;
-  ST.events[curEv].payments={};saveSt();renderTable();
+function saveSet() {
+  var pw = document.getElementById("set-pw").value;
+  ST.cfg.rtitle = document.getElementById("set-rtitle").value;
+  ST.cfg.detail = document.getElementById("set-detail").value;
+  ST.cfg.note = document.getElementById("set-note").value;
+  ST.cfg.name = document.getElementById("set-name").value;
+  ST.cfg.reg = document.getElementById("set-reg").value;
+  ST.cfg.addr = document.getElementById("set-addr").value;
+  if (pw) ST.cfg.pw = pw;
+  saveST();
+  document.getElementById("id-org-name").textContent = ST.cfg.name;
+  document.getElementById("lk-org").textContent = ST.cfg.name;
+  var msg = document.getElementById("set-msg");
+  msg.textContent = "✅ 저장됨";
+  setTimeout(function() { msg.textContent = ""; }, 2000);
 }
 
-// 은행 매칭
-var pendingM=[];
-function norm(s){return s.replace(/[^a-z0-9가-힣]/gi,'').toLowerCase();}
-function matchBank(){
-  var text=document.getElementById('bank-paste').value.trim();
-  if(!text){alert('입금 내역을 붙여넣어 주세요.');return;}
-  var lines=text.split('\n').filter(function(l){return l.trim();});
-  pendingM=[];
-  var ms=members();
-  lines.forEach(function(line){
-    var c=line.split('	');
-    if(c.length<4)return;
-    var serial=(c[0]||'').trim();
-    var date=(c[1]||'').trim().split(' ')[0];
-    var amt=Number((c[3]||'').replace(/,/g,''));
-    var nameRaw=(c[6]||c[5]||c[4]||'').trim();
-    if(!nameRaw||!amt)return;
-    var ni=norm(nameRaw);
-    var matched=null;
-    for(var i=0;i<ms.length;i++){if(norm(ms[i].biz).indexOf(ni)>-1||ni.indexOf(norm(ms[i].biz))>-1){matched=ms[i];break;}}
-    pendingM.push({serial:serial,date:date,nameRaw:nameRaw,amt:amt,matched:matched});
-  });
-  var mc=pendingM.filter(function(p){return p.matched;}).length;
-  var uc=pendingM.length-mc;
-  document.getElementById('match-summary').innerHTML='총 <strong>'+pendingM.length+'건</strong> 중 <span style="color:var(--ok);font-weight:700">'+mc+'건 매칭</span>, <span style="color:var(--danger);font-weight:700">'+uc+'건 미매칭</span>';
-  document.getElementById('match-list').innerHTML=pendingM.map(function(p){
-    return '<div class="mitem '+(p.matched?'ok':'no')+'"><div><div class="mn">'+p.nameRaw+(p.matched?' → '+p.matched.biz:'')+'</div><div class="ma">'+p.serial+' | '+p.date+' | <strong>'+p.amt.toLocaleString('ko-KR')+'원</strong></div></div><span class="ms">'+(p.matched?'매칭됨':'미매칭')+'</span></div>';
-  }).join('');
-  document.getElementById('apply-bar').classList.remove('hidden');
-  document.getElementById('apply-note').textContent=mc+'개 업체 입금 처리됩니다.';
-}
-function applyMatch(){
-  var matched=pendingM.filter(function(p){return p.matched;});
-  if(!confirm(matched.length+'개 업체를 "'+ev().name+'" 행사에 입금 처리할까요?'))return;
-  if(!ST.events[curEv].payments)ST.events[curEv].payments={};
-  matched.forEach(function(p){
-    var reg=p.matched.reg;
-    if(!ST.events[curEv].payments[reg])ST.events[curEv].payments[reg]=[];
-    var already=ST.events[curEv].payments[reg].filter(function(x){return x.serial===p.serial;}).length>0;
-    if(!already)ST.events[curEv].payments[reg].push({serial:p.serial,date:p.date,amount:p.amt});
-  });
-  saveSt();ST=JSON.parse(localStorage.getItem('kodaM'));renderTable();
-  alert('✅ '+matched.length+'개 업체 입금 처리 완료!');
-  document.querySelectorAll('.in-tab')[0].click();
-}
-
-// 비회원사
-function addExtras(){
-  var text=document.getElementById('extra-paste').value.trim();
-  if(!text)return;
-  var lines=text.split('\n').filter(function(l){return l.trim();});
-  var added=0;
-  lines.forEach(function(line){
-    var c=line.split('	');
-    if(!c[0])return;
-    var m={biz:c[0].trim(),reg:(c[1]||'').trim(),addr:(c[2]||'').trim()};
-    var dup=ST.extras.filter(function(x){return x.reg===m.reg;}).length>0;
-    if(!dup){ST.extras.push(m);added++;}
-  });
-  saveSt();
-  document.getElementById('extra-result').textContent='✅ '+added+'개 추가 완료';
-  document.getElementById('extra-paste').value='';
-  renderExtras();renderTable();
-}
-function renderExtras(){
-  var el=document.getElementById('extra-list');
-  if(!ST.extras.length){el.innerHTML='';return;}
-  el.innerHTML='<div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--muted)">추가된 비회원사 ('+ST.extras.length+'개)</div>'+
-    ST.extras.map(function(m,i){
-      return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:12px"><span style="flex:1;font-weight:500">'+m.biz+'</span><span style="color:var(--muted)">'+m.reg+'</span><button class="btnd" onclick="removeExtra('+i+')">삭제</button></div>';
-    }).join('');
-}
-function removeExtra(i){ST.extras.splice(i,1);saveSt();renderExtras();renderTable();}
-
-// 행사 설정
-function loadEvSet(){
-  var e=ev();
-  document.getElementById('evset-title').textContent='"'+e.name+'" 설정';
-  document.getElementById('es-name').value=e.name||'';
-  document.getElementById('es-rtitle').value=e.rtitle||'';
-  document.getElementById('es-detail').value=e.detail||'';
-  document.getElementById('es-note').value=e.note||'';
-  document.getElementById('es-amount').value=e.amount||'';
-  document.getElementById('es-prefix').value=e.prefix||'KODA';
-}
-function saveEvSet(){
-  ST.events[curEv].name=document.getElementById('es-name').value;
-  ST.events[curEv].rtitle=document.getElementById('es-rtitle').value;
-  ST.events[curEv].detail=document.getElementById('es-detail').value;
-  ST.events[curEv].note=document.getElementById('es-note').value;
-  ST.events[curEv].amount=Number(document.getElementById('es-amount').value);
-  ST.events[curEv].prefix=document.getElementById('es-prefix').value;
-  saveSt();renderEvTabs();
-  var msg=document.getElementById('evset-msg');msg.textContent='✅ 저장됨';setTimeout(function(){msg.textContent='';},2000);
-}
-
-// 전체 설정
-function loadGSet(){
-  document.getElementById('gs-name').value=ST.global.name||'';
-  document.getElementById('gs-reg').value=ST.global.reg||'';
-  document.getElementById('gs-addr').value=ST.global.addr||'';
-}
-function saveGSet(){
-  var pw=document.getElementById('gs-pw').value;
-  ST.global.name=document.getElementById('gs-name').value;
-  ST.global.reg=document.getElementById('gs-reg').value;
-  ST.global.addr=document.getElementById('gs-addr').value;
-  if(pw)ST.global.pw=pw;
-  saveSt();
-  var msg=document.getElementById('gset-msg');msg.textContent='✅ 저장됨';setTimeout(function(){msg.textContent='';},2000);
-}
-
-// 조회
-function lookup(){
-  var fresh=localStorage.getItem('kodaM');if(fresh)ST=JSON.parse(fresh);
-  var input=document.getElementById('reg-input').value.replace(/-/g,'').trim();
-  var err=document.getElementById('err-msg');
-  err.style.display='none';
-  document.getElementById('rsel-area').innerHTML='';
-  if(!input)return;
-  var ms=members();
-  var member=null;
-  for(var i=0;i<ms.length;i++){if(ms[i].reg.replace(/-/g,'')===input){member=ms[i];break;}}
-  if(!member){err.textContent='등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요.';err.style.display='block';return;}
-  var results=[];
-  ST.events.forEach(function(e){
-    var pmts=e.payments&&e.payments[member.reg];
-    if(pmts&&pmts.length>0){pmts.forEach(function(pmt){results.push({event:e,member:member,pmt:pmt});});}
-  });
-  if(results.length===0){err.textContent='입금이 확인된 영수증이 없습니다. 담당자에게 문의해 주세요.';err.style.display='block';return;}
-  if(results.length===1){renderReceipt(results[0].event,results[0].member,results[0].pmt);return;}
-  window._rr=results;
-  var html='<div style="margin-top:1rem;text-align:left"><div style="font-size:13px;font-weight:700;margin-bottom:10px">발급할 영수증을 선택해 주세요. ('+results.length+'건)</div>'+
-    results.map(function(r,i){
-      return '<div class="rsel-item" data-idx="'+i+'"><div class="rsel-title">'+(r.event.rtitle||r.event.name)+'</div><div class="rsel-sub">'+r.pmt.serial+' | '+r.pmt.date+' | '+Number(r.pmt.amount).toLocaleString('ko-KR')+'원</div></div>';
-    }).join('')+'</div>';
-  document.getElementById('rsel-area').innerHTML=html;
-  document.querySelectorAll('.rsel-item').forEach(function(el){
-    el.onclick=function(){var i=parseInt(el.getAttribute('data-idx'));var r=window._rr[i];renderReceipt(r.event,r.member,r.pmt);};
+function doLookup() {
+  var fresh = localStorage.getItem("koda_annual");
+  if (fresh) ST = JSON.parse(fresh);
+  var input = document.getElementById("reg-inp").value.replace(/-/g, "").trim();
+  var err = document.getElementById("err-msg");
+  err.style.display = "none";
+  document.getElementById("rsel-area").innerHTML = "";
+  if (!input) return;
+  var member = null;
+  for (var i = 0; i < INITIAL_MEMBERS.length; i++) {
+    if (INITIAL_MEMBERS[i].reg.replace(/-/g,"") === input) { member = INITIAL_MEMBERS[i]; break; }
+  }
+  if (!member) { err.textContent = "등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요."; err.style.display = "block"; return; }
+  var pmts = ST.payments[member.reg];
+  if (!pmts || pmts.length === 0) { err.textContent = "아직 입금이 확인되지 않았습니다. 담당자에게 문의해 주세요."; err.style.display = "block"; return; }
+  if (pmts.length === 1) { renderReceipt(member, pmts[0]); return; }
+  window._pmts = pmts; window._member = member;
+  var html = "<div class=\"rsel\"><div style=\"font-size:13px;font-weight:700;margin-bottom:10px\">발급할 영수증을 선택해 주세요. (" + pmts.length + "건)</div>" +
+    pmts.map(function(p, i) {
+      return "<div class=\"rsel-item\" data-i=\"" + i + "\"><div class=\"rsel-title\">" + ST.cfg.rtitle + "</div>" +
+        "<div class=\"rsel-sub\">" + p.serial + " | " + p.date + " | " + Number(p.amount).toLocaleString("ko-KR") + "원</div></div>";
+    }).join("") + "</div>";
+  document.getElementById("rsel-area").innerHTML = html;
+  document.querySelectorAll(".rsel-item").forEach(function(el) {
+    el.onclick = function() { renderReceipt(window._member, window._pmts[parseInt(el.getAttribute("data-i"))]); };
   });
 }
 
-function renderReceipt(evObj,member,pmt){
-  var org=ST.global;
-  var today=new Date();
-  var ts=today.getFullYear()+'년 '+String(today.getMonth()+1).padStart(2,'0')+'월 '+String(today.getDate()).padStart(2,'0')+'일';
-  var af=Number(pmt.amount).toLocaleString('ko-KR');
-  document.getElementById('r-paper').innerHTML=
-    '<div class="rserial"><span class="rserial-lbl">일련번호</span><span>'+pmt.serial+'</span></div>'+
-    '<div class="rtitle">'+(evObj.rtitle||evObj.name+' 영수증')+'</div>'+
-    '<div class="rsec">1. 납부자</div>'+
-    '<table class="rtbl"><tr><td class="l">법 인 명</td><td>'+member.biz+'</td><td class="l2">사업자등록번호</td><td>'+member.reg+'</td></tr><tr><td class="l">주 소</td><td colspan="3">'+member.addr+'</td></tr></table>'+
-    '<div class="rsec" style="border-top:1px solid #333">2. 납부처</div>'+
-    '<table class="rtbl"><tr><td class="l">법 인 명</td><td>'+org.name+'</td><td class="l2">사업자등록번호</td><td>'+org.reg+'</td></tr><tr><td class="l">주 소</td><td colspan="3">'+org.addr+'</td></tr></table>'+
-    '<div class="rsec" style="border-top:1px solid #333">3. 납부내용</div>'+
-    '<div class="dhead"><span>연월일</span><span>세부내용</span><span>금 액</span><span>비 고</span></div>'+
-    '<div class="drow"><span>'+pmt.date+'</span><span>'+(evObj.detail||'')+'</span><span>'+af+'</span><span>'+(evObj.note||'')+'</span></div>'+
-    '<div class="trow"><span>총 계</span><span>'+af+'</span><span></span></div>'+
-    '<div class="rconfirm">위와 같이 영수하였음을 확인합니다.</div>'+
-    '<div class="rdate">'+ts+'</div>'+
-    '<div class="rissuer"><span>주관처: '+org.name+'</span><div class="rstamp"><img src="'+STAMP+'" alt="직인"/></div></div>'+
-    '<div class="rreceiver">'+member.biz+' 귀하</div>';
-  document.getElementById('r-toolbar-title').textContent=member.biz+' — '+(evObj.rtitle||evObj.name);
-  show('pg-receipt');
+function getType(amt) {
+  if (amt >= 4000000) return "이사사";
+  if (amt === 3000000) return "신규";
+  return "일반사";
 }
+
+function buildRows(pmt) {
+  var amt = Number(pmt.amount);
+  var type = getType(amt);
+  var rows = "";
+  if (type === "신규") {
+    // 연회비 2,000,000 + 입회비 1,000,000 두 줄
+    rows =
+      "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>2,000,000</span><span rowspan=\"2\">" + type + "</span></div>" +
+      "<div class=\"dr\"><span>" + pmt.date + "</span><span>입회비</span><span>1,000,000</span><span></span></div>";
+  } else {
+    rows = "<div class=\"dr\"><span>" + pmt.date + "</span><span>연회비</span><span>" + amt.toLocaleString("ko-KR") + "</span><span>" + type + "</span></div>";
+  }
+  return rows;
+}
+
+function renderReceipt(member, pmt) {
+  var cfg = ST.cfg;
+  var today = new Date();
+  var ts = today.getFullYear() + "년 " + String(today.getMonth()+1).padStart(2,"0") + "월 " + String(today.getDate()).padStart(2,"0") + "일";
+  var amt = Number(pmt.amount);
+  var af = amt.toLocaleString("ko-KR");
+  document.getElementById("r-paper").innerHTML =
+    "<div class=\"rserial\"><span class=\"rserial-l\">일련번호</span><span>" + pmt.serial + "</span></div>" +
+    "<div class=\"rtitle\">연 회 비 영 수 증</div>" +
+    "<div class=\"rsec\">1. 납부자</div>" +
+    "<table class=\"rt\"><tr><td class=\"l\">법 인 명</td><td>" + member.biz + "</td><td class=\"l2\">사업자등록번호</td><td>" + member.reg + "</td></tr>" +
+    "<tr><td class=\"l\">주 소</td><td colspan=\"3\">" + member.addr + "</td></tr></table>" +
+    "<div class=\"rsec\" style=\"border-top:1px solid #333\">2. 납부처</div>" +
+    "<table class=\"rt\"><tr><td class=\"l\">법 인 명</td><td>" + cfg.name + "</td><td class=\"l2\">사업자등록번호</td><td>" + cfg.reg + "</td></tr>" +
+    "<tr><td class=\"l\">주 소</td><td colspan=\"3\">" + cfg.addr + "</td></tr></table>" +
+    "<div class=\"rsec\" style=\"border-top:1px solid #333\">3. 납부내용</div>" +
+    "<div class=\"dh\"><span>연월일</span><span>세부내용</span><span>금 액</span><span>비 고</span></div>" +
+    buildRows(pmt) +
+    "<div class=\"tr\"><span>총 계</span><span>" + af + "</span><span></span></div>" +
+    "<div class=\"rconfirm\">위와 같이 연회비를 납부하였음을 증명합니다.</div>" +
+    "<div class=\"rdate\">" + ts + "</div>" +
+    "<div class=\"rissuer\"><span>주관처: " + cfg.name + "</span><div class=\"rstamp\"><img src=\"" + STAMP + "\" alt=\"직인\"/></div></div>" +
+    "<div class=\"rreceiver\">" + member.biz + " 귀하</div>";
+  document.getElementById("r-title-bar").textContent = member.biz + " — 연회비 영수증";
+  show("pg-receipt");
+}
+
+document.addEventListener("DOMContentLoaded", initUI);
 </script>
 </body>
 </html>
