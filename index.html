@@ -129,8 +129,8 @@ textarea.paste-box:focus{border-color:var(--accent)}
 .r-confirm{text-align:center;padding:22px 0 6pt;font-size:14px;font-weight:700}
 .r-date{text-align:center;padding:6px 0 12px;font-size:12px}
 .r-issuer{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding:8px 16px 16px;font-size:12px}
-.r-stamp{width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.r-stamp img{width:56px;height:56px;object-fit:contain;opacity:0.9}
+.r-stamp{width:64px;height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}
+.r-stamp img{width:64px;height:64px;object-fit:contain;mix-blend-mode:multiply;opacity:0.88}
 .r-receiver{text-align:right;padding:10px 16px 14px;font-size:12px;border-top:1px solid #333}
 
 @media print{
@@ -265,6 +265,9 @@ textarea.paste-box:focus{border-color:var(--accent)}
     <div class="tab-panel" id="tab-setting">
       <div class="panel-card" style="max-width:500px">
         <p style="font-size:13px;color:var(--muted);margin-bottom:1rem">기관 정보를 수정하면 발급되는 모든 영수증에 반영됩니다.</p>
+        <div class="setting-row"><label>영수증 제목</label><input id="s-title" placeholder="참가비 영수증"/></div>
+        <div class="setting-row"><label>세부내용</label><input id="s-detail" placeholder="골프대회 참가비"/></div>
+        <div class="setting-row"><label>비 고</label><input id="s-note" placeholder="1人 참가비"/></div>
         <div class="setting-row"><label>기관명</label><input id="s-name"/></div>
         <div class="setting-row"><label>사업자등록번호</label><input id="s-reg"/></div>
         <div class="setting-row"><label>주소</label><input id="s-addr"/></div>
@@ -272,6 +275,9 @@ textarea.paste-box:focus{border-color:var(--accent)}
         <div class="setting-row"><label>행사명</label><input id="s-event"/></div>
         <div class="setting-row"><label>행사 날짜</label><input id="s-date" type="date"/></div>
         <div class="setting-row"><label>참가비 (원)</label><input id="s-amount" type="number"/></div>
+        <div class="setting-row"><label>영수증 제목</label><input id="s-receipt-title" placeholder="예) 참가비 영수증"/></div>
+        <div class="setting-row"><label>세부내용</label><input id="s-detail" placeholder="예) 골프대회 참가비"/></div>
+        <div class="setting-row"><label>비고</label><input id="s-note" placeholder="예) 1人 참가비"/></div>
         <div class="setting-row"><label>어드민 비밀번호</label><input id="s-pw" type="password" placeholder="변경 시 입력"/></div>
         <button class="btn btn-primary" style="margin-top:12px" onclick="saveSettings()">저장</button>
         <span id="saveMsg" style="font-size:12px;color:var(--success);margin-left:8px"></span>
@@ -318,7 +324,8 @@ const DEFAULT_ORG = {
   name:'(사)한국디지털광고협회', reg:'215-82-13855',
   addr:'서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층',
   prefix:'KODA', event:'2025 협회장배 골프대회',
-  date:'2025-04-08', amount:350000, pw:'koda1234'
+  date:'2025-04-08', amount:350000, pw:'koda1234',
+  receiptTitle:'참가비 영수증', detail:'골프대회 참가비', note:'1人 참가비'
 };
 
 // ═══════════════ 168개 초기 회원사 ═══════════════
@@ -686,6 +693,9 @@ function importMembers(){
 // ═══════════════ 설정 ═══════════════
 function loadSettings(){
   const o=state.org;
+  document.getElementById('s-title').value=o.title||'참가비 영수증';
+  document.getElementById('s-detail').value=o.detail||o.event||'';
+  document.getElementById('s-note').value=o.note||'1人 참가비';
   document.getElementById('s-name').value=o.name||'';
   document.getElementById('s-reg').value=o.reg||'';
   document.getElementById('s-addr').value=o.addr||'';
@@ -693,9 +703,15 @@ function loadSettings(){
   document.getElementById('s-event').value=o.event||'';
   document.getElementById('s-date').value=o.date||'';
   document.getElementById('s-amount').value=o.amount||'';
+  document.getElementById('s-receipt-title').value=o.receiptTitle||'참가비 영수증';
+  document.getElementById('s-detail').value=o.detail||o.event||'';
+  document.getElementById('s-note').value=o.note||'1人 참가비';
 }
 function saveSettings(){
   const pw=document.getElementById('s-pw').value;
+  state.org.title=document.getElementById('s-title').value||'참가비 영수증';
+  state.org.detail=document.getElementById('s-detail').value;
+  state.org.note=document.getElementById('s-note').value||'1人 참가비';
   state.org.name=document.getElementById('s-name').value;
   state.org.reg=document.getElementById('s-reg').value;
   state.org.addr=document.getElementById('s-addr').value;
@@ -703,6 +719,9 @@ function saveSettings(){
   state.org.event=document.getElementById('s-event').value;
   state.org.date=document.getElementById('s-date').value;
   state.org.amount=Number(document.getElementById('s-amount').value);
+  state.org.receiptTitle=document.getElementById('s-receipt-title').value||'참가비 영수증';
+  state.org.detail=document.getElementById('s-detail').value;
+  state.org.note=document.getElementById('s-note').value||'1人 참가비';
   if(pw)state.org.pw=pw;
   save();
   document.getElementById('adminTitle').textContent='어드민 — '+state.org.name;
@@ -738,9 +757,12 @@ function renderReceipt(r){
   const today=new Date();
   const ts=today.getFullYear()+'년 '+String(today.getMonth()+1).padStart(2,'0')+'월 '+String(today.getDate()).padStart(2,'0')+'일';
   const af=Number(r.amount).toLocaleString('ko-KR');
+  const rcTitle=org.receiptTitle||org.title||'참가비 영수증';
+  const rcDetail=r.detail||org.detail||org.event||'';
+  const rcNote=org.note||'1人 참가비';
   document.getElementById('receiptPaper').innerHTML=`
     <div class="r-serial-bar"><span class="r-serial-label">일련번호</span><span>${r.serial}</span></div>
-    <div class="r-title">참가비 영수증</div>
+    <div class="r-title">${rcTitle}</div>
     <div class="r-sec-head">1. 납부자</div>
     <table class="r-table">
       <tr><td class="lbl">법 인 명</td><td>${r.biz}</td><td class="lbl2">사업자등록번호</td><td>${r.reg}</td></tr>
@@ -753,7 +775,7 @@ function renderReceipt(r){
     </table>
     <div class="r-sec-head" style="border-top:1px solid #333">3. 납부내용</div>
     <div class="detail-head"><span>연월일</span><span>세부내용</span><span>금 액</span><span>비 고</span></div>
-    <div class="detail-row"><span>${r.date}</span><span>${r.detail}</span><span>${af}</span><span>1人 참가비</span></div>
+    <div class="detail-row"><span>${r.date}</span><span>${rcDetail}</span><span>${af}</span><span>${rcNote}</span></div>
     <div class="total-row"><span>총 계</span><span>${af}</span><span></span></div>
     <div class="r-confirm">위와 같이 영수하였음을 확인합니다.</div>
     <div class="r-date">${ts}</div>
