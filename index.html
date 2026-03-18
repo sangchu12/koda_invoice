@@ -5,31 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>영수증 발급 시스템</title>
 <style>
-:root {
-  --bg: #f5f4f0;
-  --card: #ffffff;
-  --border: #d8d4cc;
-  --text: #1a1916;
-  --muted: #7a776e;
-  --accent: #1a3a5c;
-  --accent-light: #e8eef5;
-  --danger: #c0392b;
-  --danger-light: #fdf0ee;
-  --success: #1a6b3a;
-  --success-light: #edf7f1;
-  --warning: #b45309;
-  --warning-light: #fef3e2;
-  --radius: 10px;
-}
+:root{--bg:#f5f4f0;--card:#fff;--border:#d8d4cc;--text:#1a1916;--muted:#7a776e;--accent:#1a3a5c;--accent-light:#e8eef5;--danger:#c0392b;--success:#1a6b3a;--success-light:#edf7f1;--warning:#b45309;--warning-light:#fef3e2;--radius:10px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans KR','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* ── 공통 ── */
 .btn{padding:8px 16px;font-size:13px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit;transition:background .15s}
 .btn:hover{background:#f0ede8}
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .btn-primary:hover{opacity:.88}
-.btn-danger{background:var(--danger);color:#fff;border-color:var(--danger)}
 .btn-sm{padding:4px 10px;font-size:12px}
 input,select,textarea{font-family:inherit;font-size:13px;padding:8px 10px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);outline:none;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
@@ -37,82 +19,86 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .badge-paid{background:var(--success-light);color:var(--success)}
 .badge-unpaid{background:var(--warning-light);color:var(--warning)}
 
-/* ── 모드 선택 화면 ── */
+/* 모드 선택 */
 #modePage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
 .mode-wrap{width:100%;max-width:480px}
 .mode-logo{text-align:center;margin-bottom:2rem}
 .mode-logo .org{font-size:13px;color:var(--muted);margin-bottom:6px}
-.mode-logo h1{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.mode-logo h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
 .mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .mode-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;cursor:pointer;transition:border-color .2s,box-shadow .2s;text-align:center}
 .mode-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(26,58,92,.1)}
 .mode-icon{font-size:28px;margin-bottom:10px}
 .mode-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
 .mode-card p{font-size:12px;color:var(--muted);line-height:1.5}
-.admin-card{border-color:var(--accent)}
 .admin-pw{margin-top:16px;display:none}
 .admin-pw input{text-align:center;letter-spacing:4px}
 .pw-error{font-size:12px;color:var(--danger);text-align:center;margin-top:6px;display:none}
 
-/* ── 어드민 ── */
+/* 어드민 */
 #adminPage{display:none;min-height:100vh}
 .admin-header{background:var(--accent);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
 .admin-header h2{font-size:16px;font-weight:700}
 .admin-body{padding:1.5rem;max-width:1100px;margin:0 auto}
-
-.admin-tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:0}
+.admin-tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
 .tab-btn{padding:8px 18px;font-size:13px;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:700}
-
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
-/* 엑셀 붙여넣기 탭 */
-.paste-area{border:1.5px dashed var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:1rem}
-.paste-area textarea{border:none;resize:vertical;min-height:120px;background:transparent;font-size:12px;font-family:'Consolas','Courier New',monospace}
-.paste-area textarea:focus{border:none;outline:none}
-.col-guide{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px}
-.col-guide span{background:var(--accent-light);color:var(--accent);font-size:11px;padding:3px 6px;border-radius:4px;text-align:center}
-
-/* 회원사 목록 탭 */
-.list-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
-.list-toolbar input[type=text]{max-width:220px}
+/* 통계 카드 */
 .stats{display:flex;gap:8px;margin-left:auto}
 .stat-box{background:var(--card);border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 14px;text-align:center}
 .stat-box .n{font-size:18px;font-weight:700}
 .stat-box .l{font-size:11px;color:var(--muted)}
 
+/* 회원사 테이블 */
+.list-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.list-toolbar input[type=text]{max-width:220px}
 .member-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border)}
 .member-table th{background:#f5f4f0;padding:9px 12px;font-size:12px;font-weight:700;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
 .member-table td{padding:8px 12px;font-size:12px;border-bottom:0.5px solid var(--border);vertical-align:middle}
 .member-table tr:last-child td{border-bottom:none}
 .member-table tr:hover td{background:#faf9f7}
-.toggle-wrap{display:flex;align-items:center;gap:6px}
-.toggle{position:relative;width:36px;height:20px;cursor:pointer}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:20px;transition:.2s}
-.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
-.toggle input:checked+.toggle-slider{background:var(--success)}
-.toggle input:checked+.toggle-slider:before{transform:translateX(16px)}
+
+/* 입금내역 탭 */
+.bank-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.panel-card{background:var(--card);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.panel-title{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.col-guide{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.col-guide span{background:var(--accent-light);color:var(--accent);font-size:11px;padding:3px 8px;border-radius:4px}
+textarea.paste-box{border:1.5px dashed var(--border);resize:vertical;min-height:140px;font-size:12px;font-family:'Consolas','Courier New',monospace;line-height:1.6}
+textarea.paste-box:focus{border-color:var(--accent)}
+.match-result-list{margin-top:12px;max-height:300px;overflow-y:auto}
+.match-item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:12px}
+.match-item.matched{background:var(--success-light)}
+.match-item.unmatched{background:#fdf0ee}
+.match-item .name{font-weight:600}
+.match-item .amt{font-family:monospace;font-size:11px;color:var(--muted)}
+.match-item .status{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;white-space:nowrap}
+.match-item.matched .status{background:#c6f0d8;color:var(--success)}
+.match-item.unmatched .status{background:#fdd;color:var(--danger)}
+.apply-bar{margin-top:12px;display:flex;align-items:center;gap:10px}
 
 /* 설정 탭 */
 .setting-row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:10px}
 .setting-row label{font-size:13px;font-weight:500}
 
-/* ── 업체용 조회 화면 ── */
+/* 조회 화면 */
 #lookupPage{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
 .lookup-card{background:var(--card);border:0.5px solid var(--border);border-radius:16px;padding:3rem 2.5rem;width:100%;max-width:440px;text-align:center}
 .org-badge{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1.5rem}
 .lookup-card h1{font-size:22px;font-weight:700;margin-bottom:.4rem}
-.lookup-card p{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.6}
-.input-wrap input{padding:14px 16px;font-size:15px;letter-spacing:1px;background:#fafaf8;transition:border-color .2s}
-.input-wrap input:focus{background:#fff}
-.btn-search{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px}
+.lookup-card p{font-size:14px;color:var(--muted);margin-bottom:2rem;line-height:1.6;white-space:pre-line}
+.lookup-card .input-wrap{margin-bottom:10px}
+.lookup-card .input-wrap input{padding:14px 16px;font-size:15px;letter-spacing:1px;background:#fafaf8}
+.lookup-card .input-wrap input:focus{background:#fff}
+.btn-search{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-search:hover{opacity:.88}
 .error-msg{margin-top:1rem;font-size:13px;color:var(--danger);display:none}
 .lookup-footer{margin-top:1.5rem;font-size:12px;color:var(--muted);line-height:1.7}
 
-/* ── 영수증 ── */
+/* 영수증 */
 #receiptPage{display:none}
 .receipt-toolbar{background:var(--accent);color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .receipt-toolbar span{font-size:14px;opacity:.85}
@@ -121,7 +107,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .btn-back{background:rgba(255,255,255,.15);color:#fff}
 .btn-back:hover{background:rgba(255,255,255,.25)}
 .btn-print{background:#fff;color:var(--accent)}
-.btn-print:hover{background:#eef2f7}
 .receipt-container{padding:2.5rem;display:flex;justify-content:center}
 .receipt-paper{width:680px;background:#fff;border:1.5px solid #222;font-family:'Noto Sans KR','Malgun Gothic',sans-serif;color:#000}
 .r-serial-bar{border-bottom:1px solid #333;padding:6px 12px;font-size:11px;display:flex;align-items:center;gap:10px}
@@ -141,14 +126,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .total-row{display:grid;grid-template-columns:58% 24% 18%;border-bottom:1px solid #333;background:#f9f9f9}
 .total-row span{padding:7px 8px;font-size:12px;font-weight:700;text-align:center;border-right:0.5px solid #ccc}
 .total-row span:last-child{border-right:none}
-.r-confirm{text-align:center;padding:22px 0 6px;font-size:14px;font-weight:700}
+.r-confirm{text-align:center;padding:22px 0 6pt;font-size:14px;font-weight:700}
 .r-date{text-align:center;padding:6px 0 12px;font-size:12px}
 .r-issuer{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding:8px 16px 16px;font-size:12px}
 .r-stamp{width:46px;height:46px;border:2px solid #b00;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#b00;font-weight:700;font-size:11px;flex-shrink:0}
 .r-receiver{text-align:right;padding:10px 16px 14px;font-size:12px;border-top:1px solid #333}
 
 @media print{
-  #modePage,#adminPage,#lookupPage .lookup-card,.receipt-toolbar{display:none!important}
+  #modePage,#adminPage,#lookupPage,.receipt-toolbar{display:none!important}
   #receiptPage{display:block!important}
   .receipt-container{padding:0}
   .receipt-paper{border:1.5px solid #000;width:100%}
@@ -160,9 +145,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 </head>
 <body>
 
-<!-- ════════════════════════════════
-     모드 선택 화면
-════════════════════════════════ -->
+<!-- 모드 선택 -->
 <div id="modePage">
   <div class="mode-wrap">
     <div class="mode-logo">
@@ -170,7 +153,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
       <h1>참가비 영수증 발급 시스템</h1>
     </div>
     <div class="mode-cards">
-      <div class="mode-card admin-card" onclick="showAdminPw()">
+      <div class="mode-card" style="border-color:var(--accent)" onclick="showAdminPw()">
         <div class="mode-icon">🔐</div>
         <h3>어드민</h3>
         <p>회원사 관리 및<br>입금 현황 업데이트</p>
@@ -189,22 +172,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     어드민 페이지
-════════════════════════════════ -->
+<!-- 어드민 -->
 <div id="adminPage">
   <div class="admin-header">
-    <h2 id="adminTitle">어드민 — 영수증 발급 시스템</h2>
+    <h2 id="adminTitle">어드민</h2>
     <button class="btn" style="color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1)" onclick="goMode()">← 나가기</button>
   </div>
   <div class="admin-body">
     <div class="admin-tabs">
-      <button class="tab-btn active" onclick="switchTab('tab-list')">회원사 목록</button>
-      <button class="tab-btn" onclick="switchTab('tab-paste')">엑셀 붙여넣기</button>
-      <button class="tab-btn" onclick="switchTab('tab-setting')">설정</button>
+      <button class="tab-btn active" onclick="switchTab('tab-list',this)">📋 회원사 목록</button>
+      <button class="tab-btn" onclick="switchTab('tab-bank',this)">💰 입금 내역 업데이트</button>
+      <button class="tab-btn" onclick="switchTab('tab-member-paste',this)">📥 회원사 교체</button>
+      <button class="tab-btn" onclick="switchTab('tab-setting',this)">⚙️ 설정</button>
     </div>
 
-    <!-- 회원사 목록 탭 -->
+    <!-- 회원사 목록 -->
     <div class="tab-panel active" id="tab-list">
       <div class="list-toolbar">
         <input type="text" id="searchInput" placeholder="회사명 또는 사업자번호 검색..." oninput="renderTable()" style="max-width:220px"/>
@@ -213,8 +195,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
           <option value="paid">입금완료</option>
           <option value="unpaid">미입금</option>
         </select>
-        <button class="btn btn-sm" onclick="markAll(true)">전체 입금처리</button>
-        <button class="btn btn-sm" onclick="markAll(false)">전체 초기화</button>
+        <button class="btn btn-sm" onclick="resetAllPaid()">입금 전체 초기화</button>
         <div class="stats">
           <div class="stat-box"><div class="n" id="statTotal">0</div><div class="l">전체</div></div>
           <div class="stat-box"><div class="n" id="statPaid" style="color:var(--success)">0</div><div class="l">입금완료</div></div>
@@ -226,43 +207,68 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
           <tr>
             <th style="width:36px">No</th>
             <th>법인명</th>
-            <th>사업자등록번호</th>
+            <th style="width:130px">사업자등록번호</th>
             <th>주소</th>
-            <th style="width:90px">입금여부</th>
+            <th style="width:80px;text-align:center">입금여부</th>
           </tr>
         </thead>
         <tbody id="memberTbody"></tbody>
       </table>
     </div>
 
-    <!-- 엑셀 붙여넣기 탭 -->
-    <div class="tab-panel" id="tab-paste">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">엑셀에서 데이터를 복사(Ctrl+C)한 후 아래에 붙여넣기(Ctrl+V) 하세요. 기존 데이터는 덮어씌워집니다.</p>
-      <div class="col-guide">
-        <span>A: 법인명</span><span>B: 사업자번호</span><span>C: 주소</span><span>D: 세부내용</span><span>E: 날짜</span><span>F: 금액</span>
+    <!-- 입금 내역 업데이트 -->
+    <div class="tab-panel" id="tab-bank">
+      <div class="bank-layout">
+        <div class="panel-card">
+          <div class="panel-title">① 은행 입금 내역 붙여넣기</div>
+          <div class="col-guide">
+            <span>A: 년도</span><span>B: 거래일시</span><span>C: 입금액</span><span>D: 내용(회사명)</span><span>E: 잔액</span><span>F: 거래점명</span><span>G: 회사명</span>
+          </div>
+          <textarea class="paste-box" id="bankPaste" placeholder="은행 엑셀에서 복사 후 여기에 붙여넣기...&#10;&#10;예)&#10;2026	2026.01.07 14:55:05	3,000,000	(주)이엔미디어	290,387,674	(우리)	이엔미디어	일반사"></textarea>
+          <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="matchBank()">🔍 매칭 실행</button>
+        </div>
+        <div class="panel-card">
+          <div class="panel-title">② 매칭 결과</div>
+          <div id="matchSummary" style="font-size:12px;color:var(--muted);margin-bottom:8px">입금 내역을 붙여넣고 매칭 실행 버튼을 눌러주세요.</div>
+          <div class="match-result-list" id="matchResultList"></div>
+          <div class="apply-bar" id="applyBar" style="display:none">
+            <button class="btn btn-primary" onclick="applyMatch()">✅ 입금 처리 적용</button>
+            <span style="font-size:12px;color:var(--muted)" id="applyNote"></span>
+          </div>
+        </div>
       </div>
-      <div class="paste-area">
-        <textarea id="pasteArea" placeholder="여기에 엑셀 데이터를 붙여넣으세요...&#10;예) 주식회사 레뷰코퍼레이션	261-81-22044	서울 강남구...	골프대회 참가비	2025-04-08	350000"></textarea>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btn-primary" onclick="importPaste()">불러오기</button>
-        <span id="pasteResult" style="font-size:13px;color:var(--success)"></span>
-      </div>
-      <div style="margin-top:1.5rem;padding:1rem;background:var(--accent-light);border-radius:var(--radius);font-size:12px;color:var(--accent);line-height:1.8">
-        <strong>💡 기존 회원사 데이터를 유지하면서 입금 여부만 업데이트하려면?</strong><br>
-        회원사 목록 탭에서 토글을 직접 켜고 끄세요. 엑셀 붙여넣기는 새 행사 시즌에 전체 데이터를 교체할 때 사용하세요.
+      <div style="margin-top:1rem;padding:1rem;background:var(--accent-light);border-radius:var(--radius);font-size:12px;color:var(--accent);line-height:1.8">
+        <strong>💡 매칭 방식 안내</strong><br>
+        은행 내역의 <strong>G열(회사명)</strong> 또는 <strong>D열(내용)</strong>을 회원사 법인명과 비교해서 자동 매칭해요.<br>
+        매칭된 업체만 입금 처리되며, 미매칭 업체는 수동으로 처리할 수 있어요.
       </div>
     </div>
 
-    <!-- 설정 탭 -->
+    <!-- 회원사 교체 -->
+    <div class="tab-panel" id="tab-member-paste">
+      <div class="panel-card" style="max-width:700px">
+        <div class="panel-title">회원사 명단 교체 (새 행사 시즌)</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px">엑셀 회원사 명단을 복사해서 붙여넣으세요. <strong>기존 데이터는 모두 초기화</strong>됩니다.</p>
+        <div class="col-guide" style="margin-bottom:10px">
+          <span>A: 법인명</span><span>B: 사업자번호</span><span>C: 주소</span><span>D: 세부내용(선택)</span><span>E: 날짜(선택)</span><span>F: 금액(선택)</span>
+        </div>
+        <textarea class="paste-box" id="memberPaste" style="min-height:160px" placeholder="여기에 회원사 엑셀 데이터를 붙여넣으세요..."></textarea>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+          <button class="btn btn-primary" onclick="importMembers()">불러오기</button>
+          <span id="memberPasteResult" style="font-size:12px;color:var(--success)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 설정 -->
     <div class="tab-panel" id="tab-setting">
-      <div style="background:var(--card);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:500px">
+      <div class="panel-card" style="max-width:500px">
         <p style="font-size:13px;color:var(--muted);margin-bottom:1rem">기관 정보를 수정하면 발급되는 모든 영수증에 반영됩니다.</p>
-        <div class="setting-row"><label>기관명</label><input id="s-name" /></div>
-        <div class="setting-row"><label>사업자등록번호</label><input id="s-reg" /></div>
-        <div class="setting-row"><label>주소</label><input id="s-addr" /></div>
+        <div class="setting-row"><label>기관명</label><input id="s-name"/></div>
+        <div class="setting-row"><label>사업자등록번호</label><input id="s-reg"/></div>
+        <div class="setting-row"><label>주소</label><input id="s-addr"/></div>
         <div class="setting-row"><label>일련번호 접두어</label><input id="s-prefix" style="width:100px"/></div>
-        <div class="setting-row"><label>행사명</label><input id="s-event" /></div>
+        <div class="setting-row"><label>행사명</label><input id="s-event"/></div>
         <div class="setting-row"><label>행사 날짜</label><input id="s-date" type="date"/></div>
         <div class="setting-row"><label>참가비 (원)</label><input id="s-amount" type="number"/></div>
         <div class="setting-row"><label>어드민 비밀번호</label><input id="s-pw" type="password" placeholder="변경 시 입력"/></div>
@@ -273,17 +279,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     업체용 조회 화면
-════════════════════════════════ -->
+<!-- 업체용 조회 -->
 <div id="lookupPage" style="display:flex">
   <div class="lookup-card">
     <div class="org-badge" id="lookupOrg"></div>
     <h1>참가비 영수증 발급</h1>
     <p id="lookupDesc"></p>
-    <div class="input-wrap" style="margin-bottom:10px">
-      <input type="text" id="regInput" placeholder="사업자등록번호 입력 (예: 261-81-22044)"
-             maxlength="12" oninput="formatReg(this)" onkeydown="if(event.key==='Enter')lookup()"/>
+    <div class="input-wrap">
+      <input type="text" id="regInput" placeholder="사업자등록번호 (예: 261-81-22044)" maxlength="12" oninput="formatReg(this)" onkeydown="if(event.key==='Enter')lookup()"/>
     </div>
     <button class="btn-search" onclick="lookup()">영수증 조회</button>
     <div class="error-msg" id="errorMsg"></div>
@@ -294,9 +297,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     영수증 출력 화면
-════════════════════════════════ -->
+<!-- 영수증 -->
 <div id="receiptPage">
   <div class="receipt-toolbar">
     <span id="toolbarTitle"></span>
@@ -311,429 +312,414 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// 기본 설정 (최초 1회 — 이후 설정 탭에서 관리)
-// ═══════════════════════════════════════
+// ═══════════════ 기본 설정 ═══════════════
 const DEFAULT_ORG = {
-  name:   "(사)한국디지털광고협회",
-  reg:    "215-82-13855",
-  addr:   "서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층",
-  prefix: "KODA",
-  event:  "2025 협회장배 골프대회",
-  date:   "2025-04-08",
-  amount: 350000,
-  pw:     "koda1234"
+  name:'(사)한국디지털광고협회', reg:'215-82-13855',
+  addr:'서울시 송파구 올림픽로 35길 137, 한국광고문화회관 10층',
+  prefix:'KODA', event:'2025 협회장배 골프대회',
+  date:'2025-04-08', amount:350000, pw:'koda1234'
 };
 
-// ═══════════════════════════════════════
-// 초기 회원사 데이터 (168개)
-// ═══════════════════════════════════════
-const INITIAL_PARTICIPANTS = [
-  { biz:"구글코리아(유)", reg:"120-86-65164", addr:"서울특별시 강남구 테헤란로 152 역삼동 강남파이낸스센터 22층" },
-  { biz:"그랑몬스터㈜", reg:"220-88-04194", addr:"서울특별시 강남구 삼성로 511 골든타워 5층" },
-  { biz:"㈜그루컴퍼니", reg:"220-88-80926", addr:"서울특별시 성동구 성수이로 10길 14, 에이스하이엔드성수타워 1201,1202,1203호" },
-  { biz:"㈜나무커뮤니케이션", reg:"120-86-46264", addr:"서울특별시 송파구 중대로 135, 13층 서관 1301호(가락동,아이티벤처타워)" },
-  { biz:"주식회사 케이티나스미디어", reg:"220-81-80363", addr:"서울특별시 강남구 도곡로1길  14, 3층 4층, 5층(역삼동, 삼일프라자오피스텔)" },
-  { biz:"네이버㈜", reg:"220-81-62517", addr:"경기도 성남시 분당구 정자일로 95" },
-  { biz:"㈜넥스트미디어그룹", reg:"545-81-00889", addr:"서울특별시 강남구 언주로 637, 13층(논현동, 싸이칸타워)" },
-  { biz:"㈜다츠", reg:"204-81-39066", addr:"서울특별시 서초구 방배동 753-12" },
-  { biz:"㈜다트미디어", reg:"107-86-93497", addr:"서울특별시 영등포구 양평동 3가 15-1 월드메르디앙비즈센터 407호" },
-  { biz:"㈜더에스엠씨", reg:"108-81-93684", addr:"서울특별시 강남구 봉은사로49길 22, 더에스엠씨빌딩 2층(논현동)" },
-  { biz:"㈜드림인사이트", reg:"114-87-03025", addr:"서울특별시 구로구 디지털로33길 12, 우림이비지센터2차 14층" },
-  { biz:"㈜디뉴먼트", reg:"172-86-00221", addr:"서울특별시 금천구 가산디지털2로 108, 502호, 907호(가산동, 뉴티캐슬)" },
-  { biz:"㈜디엑스이", reg:"581-81-00925", addr:"서울특별시 중구 동호로 330, 8층(쌍림동, 씨제이제일제당센터)" },
-  { biz:"㈜디지털다임", reg:"211-86-90483", addr:"서울특별시 용산구 한남동 대사관로11길 41 디투인터랙티브 빌딩" },
-  { biz:"㈜디지털트리니티", reg:"211-88-21544", addr:"서울특별시 용산구 서빙고로 17(한강로 3가), 센트럴파크타워 24층" },
-  { biz:"디지털퍼스트㈜", reg:"770-81-00660", addr:"서울특별시 용산구 서빙고로 17, 센트럴파크타워 25층" },
-  { biz:"㈜디트라이브", reg:"220-86-10218", addr:"서울특별시 성동구 왕십리로 125, 1002호 1002-2,4,5,6(성수동1가, KD타워)" },
-  { biz:"㈜디퍼플", reg:"211-88-70292", addr:"서울특별시 강남구 언주로 609 (논현동, 팍스타워) A동 7층" },
-  { biz:"㈜디플랜360", reg:"647-86-01398", addr:"서울특별시 강남구 테헤란로 443, 11층(삼성동, 애플트리타워)" },
-  { biz:"리머지(유)", reg:"655-81-01701", addr:"서울특별시 강남구 선릉로 428, 14층 126호(대치동, 위워크선릉 3호점)" },
-  { biz:"㈜리서치애드", reg:"220-86-93863", addr:"서울특별시 강남구 학동로34길 16 티플러스빌딩 2층" },
-  { biz:"㈜마더브레인", reg:"211-88-24084", addr:"서울특별시 서초구 54 서초대로 77길 서초W타워 15-16층" },
-  { biz:"㈜망고스타코리아(MANGOSTAR KOREA)", reg:"443-86-00365", addr:"서울특별시 강남구 선릉로 91길 14, 선릉빌딩 402호" },
-  { biz:"㈜매드업", reg:"119-87-06634", addr:"서울특별시 서초구 서초대로 74길 4, 삼성생명서초타워 20층" },
-  { biz:"㈜매드코퍼레이션", reg:"365-88-01262", addr:"서울특별시 강남구 테헤란로 123, 15층 1501호(역삼동, 여삼빌딩)" },
-  { biz:"㈜씨제이메조미디어", reg:"120-81-88352", addr:"서울특별시 중구 동호로 330, 4층(쌍림동)" },
-  { biz:"㈜모비데이즈", reg:"832-87-01824", addr:"서울특별시 강남구 언주로 417, 지하1층-8층 (역삼동, 모비빌딩)" },
-  { biz:"㈜모티브인텔리전스", reg:"212-86-09248", addr:"서울특별시 강남구 테헤란로 132, 13층(역삼동, 한독약품빌딩)" },
-  { biz:"㈜미래아이엔씨", reg:"106-81-93204", addr:"서울특별시 금천구 가산디지털2로 144, 13층(가산동, 현대테라타워 가산디케이)" },
-  { biz:"주식회사 미래피엠피", reg:"742-81-02251", addr:"서울특별시 강남구 언주로149길 9(논현동, 시엘빌딩)" },
-  { biz:"주식회사 바이너리큐브", reg:"211-88-78353", addr:"서울특별시 성동구 성수이로 147, 506호 507호(성수동2가, 아이에스비즈타워)" },
-  { biz:"㈜버즈빌", reg:"119-86-55841", addr:"서울특별시 송파구 송파동 32(석촌호수로 272) 엠와이빌딩 2-5층" },
-  { biz:"㈜베리타스커넥트", reg:"220-86-45056", addr:"서울특별시 서초구 강남대로331, 9층(서초동, 광일빌딩)" },
-  { biz:"볼디㈜", reg:"556-88-02095", addr:"서울특별시 강남구 압구정로 36길 12, 6층" },
-  { biz:"봄센㈜", reg:"516-88-00648", addr:"서울특별시 성동구 광나루로 176 4,5층 (성수동1가)" },
-  { biz:"주식회사 블루오렌지커뮤니케이션즈", reg:"264-81-37022", addr:"서울특별시 서초구 서초대로48길 33, 3층 301호(서초동)" },
-  { biz:"㈜비욘드마케팅그룹", reg:"120-86-46551", addr:"서울특별시 강남구 논현로 651 대한법무사회관 1, 5,6층" },
-  { biz:"㈜비즈스프링", reg:"120-86-63550", addr:"서울특별시 성동구 광나루로 130 서울숲IT캐슬" },
-  { biz:"㈜생각하는늑대", reg:"760-81-00931", addr:"서울특별시 강남구 테헤란로82길 15, 14층" },
-  { biz:"㈜수커뮤니케이션", reg:"220-88-00446", addr:"서울특별시 성동구 성수일로8길 5, 서울숲SK V1타워 A동 1204호" },
-  { biz:"㈜스타디엠코퍼레이션", reg:"181-86-01734", addr:"경기도 부천시 신흥로 234, 3층(중동, 뉴월드 프라자)" },
-  { biz:"㈜스파클인터렉티브", reg:"264-81-08304", addr:"서울특별시 강남구 논현로 746, 4층(논현동, 석호빌딩)" },
-  { biz:"주식회사 씨더블유", reg:"265-88-00736", addr:"서울특별시 강남구 도산대로16길 13-20, 지하 1층(논현동, 청구빌딩)" },
-  { biz:"㈜아이디어키", reg:"220-87-07893", addr:"서울특별시 송파구 백제고분로 362, 3,4층(석촌동)" },
-  { biz:"㈜아이애드원", reg:"101-86-49275", addr:"서울특별시 서초구 서초대로 250 스타갤러리브릿지빌딩 12층" },
-  { biz:"주식회사 아이지에이웍스", reg:"220-87-41741", addr:"서울특별시 용산구 서빙고로 17, 24,25,26층(한강로3가, 센트럴파크타워)" },
-  { biz:"㈜아인스미디어", reg:"109-86-20253", addr:"서울특별시 금천구 가산디지털2로 144, 19층(가산동, 현대테라타워 가산디케이)" },
-  { biz:"㈜아치서울", reg:"804-81-01036", addr:"서울특별시 광진구 광나루로 478 광진경제허브센터 도약관 303호" },
-  { biz:"주식회사 숲", reg:"220-81-10886", addr:"경기도 성남시 분당구 판교로228번길 15(삼평동, 판교벤처밸리1단지 2동 201, 901호)" },
-  { biz:"애니포인트미디어㈜", reg:"696-88-00075", addr:"서울특별시 강남구 삼성동 테헤란로87길 21, 6층" },
-  { biz:"㈜애드게이트", reg:"215-86-78948", addr:"서울특별시 성동구 성수동1가 13-214 동진아이티타워 12층 1210호" },
-  { biz:"㈜애드미션", reg:"220-86-54614", addr:"서울특별시 서초구 서운로 9길 14, 일석빌딩 4층, 5층" },
-  { biz:"애드온컴퍼니㈜", reg:"220-88-61138", addr:"서울특별시 송파구 올림픽로 269, 803호 (신천동, 롯데캐슬골드)" },
-  { biz:"㈜애드이피션시", reg:"264-81-02917", addr:"서울특별시 서초구 효령로77길 28 동오빌딩 4층, 6층" },
-  { biz:"주식회사 애드쿠아인터렉티브", reg:"211-87-25387", addr:"서울특별시 강남구 언주로 637, 2,3,4층(논현동, 싸이칸타워)" },
-  { biz:"네이트커뮤니케이션즈 주식회사", reg:"220-81-37906", addr:"서울특별시 중구 소월로2길 30(남대문로5가, 티타워)" },
-  { biz:"㈜에이디쏠인터렉티브", reg:"602-87-01640", addr:"서울특별시 성동구 성수일로10길 26, 제본동 15층 1501~3호(성수동2가, 하우스디 세종타워)" },
-  { biz:"㈜에이엠피엠글로벌", reg:"105-86-67746", addr:"서울특별시 금천구 가산디지털2로 144, 가산동 11층 1101호(가산동, 현대테라타워가산DK)" },
-  { biz:"㈜에이원퍼포먼스팩토리", reg:"120-88-17220", addr:"서울특별시 강남구 테헤란로83길32, 나라키움빌딩 A동 4층" },
-  { biz:"㈜에이전시더블유", reg:"120-86-45135", addr:"서울특별시 강남구 봉은사로 49길 7 대양빌딩 2층" },
-  { biz:"㈜에이치에스애드", reg:"105-81-29368", addr:"서울특별시 마포구 마포대로 155 LG마포빌딩" },
-  { biz:"주식회사 엔비티", reg:"211-88-83652", addr:"서울특별시 강남구 논현로 145길 31(논현동)" },
-  { biz:"엔에이치엔애드㈜", reg:"144-81-27690", addr:"경기도 성남시 분당구 대왕판교로645번길 16, NHN 플레이뮤지엄 5층" },
-  { biz:"㈜엔에이치엔에이스(NHN ACE Corporation.)", reg:"313-81-35670", addr:"경기도 성남시 분당구 대왕판교로 645번길 16, 플레이뮤지엄 NHN ACE" },
-  { biz:"㈜엘지씨엔에스", reg:"116-81-19477", addr:"서울특별시 강서구 마곡중앙8로 71" },
-  { biz:"㈜엠코퍼레이션", reg:"534-87-00616", addr:"서울특별시 강남구 논현로 503, 12층(역삼동, 송촌빌딩)" },
-  { biz:"주식회사 엠투디지털", reg:"102-81-43774", addr:"서울특별시 용산구 한강대로 372(동자동) KDB생명타워 13층" },
-  { biz:"㈜엠플랜잇(MPLANIT CO. ,Ltd)", reg:"345-86-01551", addr:"서울특별시 강남구 언주로93길 21, 5층(역삼동, 남전타운)" },
-  { biz:"㈜엠피인터랙티브", reg:"113-86-41728", addr:"서울특별시 구로구 디지털로 306(구로3동 182-13) 대륭포스트타워 2차 607호" },
-  { biz:"㈜엣지랭크", reg:"211-88-82541", addr:"서울특별시 강남구 언주로 133길 26-5" },
-  { biz:"㈜예지솔루션", reg:"211-87-59290", addr:"서울특별시 금천구 가산디지털2로 166, 3층 (가산동, 에이스K1타워)" },
-  { biz:"㈜오버맨", reg:"503-87-00058", addr:"서울특별시 서초구 강남대로 85길 20(반포동, 오브이엠)" },
-  { biz:"온더플래닛㈜", reg:"182-87-01578", addr:"서울특별시 중구 통일로10, 17층 플래그원(남대문로5가, 연세대학교 세브란스빌딩)" },
-  { biz:"㈜아티스트유나이티드", reg:"114-86-82149", addr:"서울특별시 강남구 도산대로 430, 3층(청담동)" },
-  { biz:"㈜와이즈버즈", reg:"703-86-00909", addr:"경기도 성남시 수정구 금토로 69, 5층(금토동, 다우디지털스퀘어)" },
-  { biz:"㈜와일리", reg:"211-88-56742", addr:"서울특별시 강남구 학동로 336, 5층(논현동, 메이트리 빌딩)" },
-  { biz:"㈜위시미디어", reg:"495-86-00691", addr:"서울특별시 강남구 테헤란로 79길11 A타워 3층" },
-  { biz:"㈜위플랫폼", reg:"467-81-00594", addr:"서울특별시 금천구 가산디지털1로 165, 가산비즈니스센터 601호" },
-  { biz:"㈜유어비즈", reg:"220-87-31452", addr:"서울특별시 송파구 송파대로 167, 에이동 1222호(문정동, 문정역테라타워)" },
-  { biz:"㈜이너스커뮤니티", reg:"220-81-75706", addr:"서울특별시 마포구 양화로 147, 5층(동교동, 아일렉스)" },
-  { biz:"㈜이레컴즈", reg:"120-87-41500", addr:"서울특별시 구로구 디지털로 273 에이스트윈타워2차 306호" },
-  { biz:"㈜이스터씨앤아이", reg:"211-87-45554", addr:"서울특별시 강남구 삼성로 134길 8(청담동, 이스터빌딩)" },
-  { biz:"크리에이터링 주식회사", reg:"503-87-03360", addr:"서울특별시 서초구 바우뫼로27길 7-11, 대송빌딩 1층 크리에이터링(양재동)" },
-  { biz:"㈜이엠넷", reg:"214-86-56053", addr:"서울특별시 구로구 디지털로34길 27 대륭포스트타워 3차 14층" },
-  { biz:"㈜이인벤션", reg:"109-86-17438", addr:"서울특별시 구로구 디지털로31길 38-21, 10층 1009호 (이엔씨벤처드림타워3차)" },
-  { biz:"(유)이프로애드", reg:"214-87-64680", addr:"서울특별시 강남구 선릉로 642 (삼성동, 서경빌딩) 3층" },
-  { biz:"㈜인라이플", reg:"113-86-60934", addr:"서울특별시 구로구 구로동 디지털로 272 한신아이티타워 501~504호" },
-  { biz:"㈜인크로스", reg:"214-88-13475", addr:"서울특별시 관악구 남부순환로 1926(봉천동, 경동제약빌딩 5,8층)" },
-  { biz:"㈜인터웍스미디어", reg:"120-87-28467", addr:"서울특별시 강남구 테헤란로 534 글라스타워빌딩 30층" },
-  { biz:"Integral Ad Science Japan K.K", reg:"0104-01-117454", addr:"1-1-2 Yurakucho Chiyoda-ku, Tokyo, 100-0006, Japan" },
-  { biz:"㈜제이브릿지컴퍼니", reg:"144-81-25649", addr:"경기도 성남시 분당구 성남대로331번길 8, 606,607호(정자동,킨스타워)" },
-  { biz:"㈜제이슨그룹", reg:"220-87-01996", addr:"서울특별시 용산구 서빙고로 17, 센트럴파크타워 26~27층" },
-  { biz:"㈜제일기획", reg:"202-81-45960", addr:"서울특별시 용산구 이태원로 222" },
-  { biz:"젤리피쉬코리아(유)", reg:"265-87-01169", addr:"서울특별시 서초구 서초동 강남대로 373" },
-  { biz:"㈜차이커뮤니케이션", reg:"211-87-51624", addr:"서울특별시 강남구 논현로 132길 40(논현동, 차이빌딩)" },
-  { biz:"㈜카카오", reg:"120-81-47521", addr:"제주특별자치도 제주시 첨단로 242" },
-  { biz:"카페24 주식회사", reg:"118-81-20586", addr:"서울특별시 동작구 보라매로5길 15 (신대방동,전문건설회관)" },
-  { biz:"㈜케이피알앤드어소시에이츠", reg:"203-81-61115", addr:"서울특별시 중구 퇴계로 173(충무로 3가, 남산스퀘어 14층)" },
-  { biz:"주식회사 코마스인터렉티브", reg:"211-88-15173", addr:"서울특별시 강남구 학동로 311(논현동, 미성빌딩 5, 6층)" },
-  { biz:"주식회사 코비그룹", reg:"706-81-00941", addr:"서울특별시강남구도산대로4길15, 6층(논현동,큐브타워)" },
-  { biz:"크리테오코리아(유)", reg:"559-88-01270", addr:"서울특별시 강남구 테헤란로 152 강남파이낸스센터 41층" },
-  { biz:"㈜키스톤마케팅컴퍼니", reg:"211-88-43738", addr:"서울특별시 서초구 서초대로78길 5, 대각빌딩 13층" },
-  { biz:"㈜토이306", reg:"201-86-04355", addr:"서울특별시 강남구 테헤란로79길 6, 5층 503&504호(삼성동, 제이에스타워)" },
-  { biz:"㈜트리플하이엠", reg:"220-86-93067", addr:"서울특별시 금천구 디지털로 121 에이스가산타워 10층" },
-  { biz:"㈜티디아이플레이(TDI Play Co., Ltd.)", reg:"601-81-37139", addr:"서울특별시 서초구 서초대로 64길 8, 4층(서초동)" },
-  { biz:"㈜티엠씨케이", reg:"107-87-79319", addr:"서울특별시 서초구 강남대로263, 3,5층(서초동, 새움빌딩)" },
-  { biz:"TikTok Pte. Ltd.", reg:"201719908M", addr:"서울시특별시 강남구 테헤란로 518 섬유센터, 12층" },
-  { biz:"㈜판도라티비", reg:"220-81-57969", addr:"경기도 성남시 분당구 대왕판교로644번길 49, 11층" },
-  { biz:"㈜퍼틸레인", reg:"211-88-36090", addr:"서울특별시 강남구 봉은사로86길 6 빌딩레베쌍트 8층" },
-  { biz:"주식회사 퍼포먼스바이티비더블유에이", reg:"504-88-00873", addr:"서울특별시 중구 세종대로 39, 5층(남대문로4가, 대한서울상공회의소)" },
-  { biz:"피코코리아 주식회사", reg:"116-81-43166", addr:"서울특별시 강남구 언주로 804, 2층 201호(신사동,신사빌딩)" },
-  { biz:"주식회사 펜타브리드", reg:"114-86-12129", addr:"서울특별시 서초구 서운로26길 9(서초동, 펜타타워)" },
-  { biz:"메가존㈜", reg:"214-86-79342", addr:"서울특별시 강남구 학동로23길 18 펜타클빌딩" },
-  { biz:"주식회사 프로그레스미디어", reg:"113-86-27124", addr:"서울특별시 구로구 디지털로26길 43, L동 19층 1901~1905호(구로동, 대륭포스트타워8차)" },
-  { biz:"㈜플레이디", reg:"129-86-43885", addr:"경기도 성남시 분당구 황새울로 359번길 11, 5~6층" },
-  { biz:"㈜피알원", reg:"110-81-75199", addr:"서울특별시 서대문구 충정로 70, 19층(미근동, 웨스트게이트타워 19층)" },
-  { biz:"㈜픽스다인무브먼트", reg:"893-87-02148", addr:"서울특별시 강남구 테헤란로 501, 6층 601호(삼성동, 브이플렉스)" },
-  { biz:"㈜하나애드아이엠씨", reg:"117-81-48164", addr:"서울특별시 영등포구 여의도동 17-3 삼환까뮤빌딩(태흥빌딩)2층" },
-  { biz:"페리온", reg:"캐나다 법인", addr:"서울특별시 강남구 영동대로 417 오토웨이타워 스페이시스" },
-  { biz:"주식회사 오피엠에스", reg:"220-87-03688", addr:"서울특별시 강남구 역삼로 555, 1층 101호(대치동, 대치동 더블유타워)" },
-  { biz:"㈜함샤우트글로벌", reg:"882-86-01894", addr:"서울특별시 마포구 포은로2가길 57, 한울빌딩" },
-  { biz:"㈜휴먼미디어그룹", reg:"736-81-00321", addr:"경기도 부천시 길주로 279, 중동 서호빌딩 601호" },
-  { biz:"㈜이노션", reg:"220-87-09310", addr:"서울특별시 강남구 강남대로 308(역삼동)" },
-  { biz:"㈜비바리퍼블리카", reg:"120-88-01280", addr:"서울특별시 강남구 테헤란로 142, 4,10,11,12,13,22,23층(역삼동, 아크플레이스)" },
-  { biz:"비에이티㈜", reg:"567-87-00493", addr:"서울특별시 강남구 논현로153길 53, 4층(신사동, 피겨앤그라운드)" },
-  { biz:"주식회사 호잇커뮤니케이션즈", reg:"707-88-02918", addr:"서울특별시 강남구 선릉로94길 12, 6층(삼성동)" },
-  { biz:"주식회사더쏠트", reg:"395-87-02057", addr:"서울특별시 강남구 삼성로95길 6, 5층(삼성동)" },
-  { biz:"주식회사 크로마엔터테인먼트", reg:"333-86-02300", addr:"서울특별시 강남구 테헤란로83길 15, 6층(삼성동, 제이엠빌딩)" },
-  { biz:"㈜나인독", reg:"751-87-02354", addr:"서울특별시 성동구 성수일로 56, 1105호, 1106호(성수동2가, 성수동BY센터)" },
-  { biz:"주식회사 함파트너스", reg:"106-86-49566", addr:"서울특별시 마포구 마포대로 89, 4층(도화동, 포스트타워)" },
-  { biz:"주식회사 엠서치마케팅", reg:"495-86-02326", addr:"서울특별시 금천구 벚꽃로 298 대룡포스트타워6차 907호" },
-  { biz:"주식회사 몽규", reg:"865-86-01676", addr:"서울특별시 마포구 성미산로 103(연남동)" },
-  { biz:"주식회사 레뷰코퍼레이션", reg:"261-81-22044", addr:"서울특별시 강남구 논현로 135길 29(논현동)" },
-  { biz:"㈜벨커뮤니케이션즈", reg:"110-81-33831", addr:"서울특별시 서대문구 충정로 8, 8층 804호(충정로3가, 종근당빌딩)" },
-  { biz:"㈜포이시스", reg:"120-86-14175", addr:"서울특별시 금천구 가산디지털1로 137, 1101호(가산동, IT캐슬2차)" },
-  { biz:"커뮤니크㈜", reg:"106-86-12981", addr:"서울특별시 용산구 한강대로44길 14(한강로2가)" },
-  { biz:"PTKOREA", reg:"214-84-06262", addr:"서울특별시 강남구 강남대로 372, 12,13,14,16층(역삼동, FINE TOWER)" },
-  { biz:"애드커넥스 주식회사", reg:"451-81-03048", addr:"서울특별시 영등포구 당산로 141, 5층(당산동3가, 현대해상)" },
-  { biz:"주식회사 스마일코리아", reg:"109-86-39941", addr:"서울특별시 금천구 가산디지털1로 168, B동 9층 907, 908, 909호(가산동, 우림라이온스밸리)" },
-  { biz:"주식회사 커스텀그라운드", reg:"562-86-02500", addr:"서울특별시 서초구 방배로 97, 3층(방배동, 청유빌딩)" },
-  { biz:"주식회사 가치브라더", reg:"119-86-81107", addr:"서울특별시 구로구 디지털로31길 19, 404호(구로동, 에이스테크노타워II)" },
-  { biz:"주식회사 잘함", reg:"860-86-00013", addr:"서울특별시 용산구 우사단로 14길 74(한남동)" },
-  { biz:"주식회사 스냅컴퍼니", reg:"858-88-00654", addr:"서울특별시 강남구 테헤란로32길 27(역삼동, 동원빌딩)" },
-  { biz:"주식회사 퍼즐코퍼레이션", reg:"703-81-02391", addr:"서울특별시 마포구 양화로81,엘1층 엘104호(서교동,H스퀘어)" },
-  { biz:"주식회사 카카오페이", reg:"527-88-00686", addr:"경기도 성남시 분당구 판교역로 166, 비동15층(백현동)" },
-  { biz:"주식회사 이엠씨지", reg:"220-88-03176", addr:"서울특별시 용산구 한강대로15길 9-5, 402호(한강로3가, 고려빌딩)" },
-  { biz:"하이브월드와이드 주식회사", reg:"220-88-11002", addr:"서울특별시 성동구 연무장5길 9-16, 11층 1101호(성수동2가,블루스톤타워)" },
-  { biz:"더트레이드데스크 주식회사", reg:"120-88-12448", addr:"서울특별시 강남구 테헤란로 152, 41층(역삼동, 강남파이낸스센터)" },
-  { biz:"닐슨미디어코리아 유한회사", reg:"303-87-00138", addr:"서울특별시 중구 서소문로 50, 15층(중림동)" },
-  { biz:"주식회사 케이앤웍스", reg:"201-81-90900", addr:"제주특별자치도제주시첨단로242,2층(영평동,카카오스페이스닷원)" },
-  { biz:"주식회사 포바이포", reg:"712-87-00690", addr:"서울특별시 서초구 강남대로 479, 12층, 13층, 14층(반포동, 신논현타워)" },
-  { biz:"애디플 주식회사", reg:"173-87-02933", addr:"서울특별시 구로구 디지털로30길 31, 1407호(구로동, 코오롱디지털타워빌란트Ⅱ)" },
-  { biz:"엑솔라코리아 유한회사", reg:"120-88-20050", addr:"서울특별시 강남구 테헤란로 412, 13층(대치동, 티412)" },
-  { biz:"주식회사 제이비컴스컴퍼니", reg:"106-86-48271", addr:"경기도 고양시 덕양구 으뜸로8,13층 1305호(덕은동,덕은DMC아이에스BIZ타워센트럴1차지식산업센터동)" },
-  { biz:"주식회사 엘리케이트", reg:"178-86-01325", addr:"서울특별시 강남구 봉은사로26길 22-12, 102호(역삼동, 파티오하우스)" },
-  { biz:"투겟 주식회사", reg:"448-86-03426", addr:"서울특별시 구로구 디지털로26길 43, 제12층 제엘1201호(구로동)" },
-  { biz:"주식회사 부스터즈", reg:"455-86-01557", addr:"서울특별시 강남구 언주로 637, 12층(논현동,싸이칸타워)" },
-  { biz:"주식회사 써치엠", reg:"211-88-14382", addr:"서울특별시 강남구 논현로 319, 3층,4층(역삼동, 정유빌딩)" },
-  { biz:"주식회사 지엔앰퍼포먼스", reg:"211-88-76923", addr:"서울특별시 강남구 봉은사로 114, 2층(역삼동,반디빌딩)" },
-  { biz:"주식회사 씨브이쓰리", reg:"891-81-02188", addr:"서울특별시 서초구 서초대로77길 39, 8층 801호(서초동,MK빌딩)" },
-  { biz:"㈜어센드미디어", reg:"148-86-02380", addr:"서울특별시 금천구 가산디지털2로 144, 807~808" },
-  { biz:"얀고애즈", reg:"1802868", addr:"UAE, Dubai, Trade Center Second, The Offices 5, Unit No. FLR06-06.04-1 P.O. Box 29095" },
-  { biz:"주식회사 이엔미디어", reg:"183-87-00290", addr:"서울특별시 강서구 강서로56가길 141, 6층(등촌동, 케이엠빌딩)" },
-  { biz:"주식회사 유디엠", reg:"119-86-49825", addr:"서울특별시금천구가산디지털2로135,1동16층(가산동,가산어반워크)" },
-  { biz:"주식회사 트레져헌터", reg:"120-88-23509", addr:"서울특별시 성동구 성수이로20길 16, 8층(성수동2가, 제이케이타워)" },
-  { biz:"주식회사 런커뮤니케이션즈", reg:"853-88-00057", addr:"서울특별시 성동구 뚝섬로1길 25, 9층 903호(성수동1가, 서울숲한라에코밸리)" },
-  { biz:"주식회사 벡터컴", reg:"211-88-21068", addr:"서울특별시 강남구 테헤란로26길 14(06236) 위워크빌딩 9층" },
-  { biz:"주식회사 히히", reg:"507-81-17393", addr:"서울특별시 강남구 강남대로128길 81, 4층 (논현동, 리쉬빌딩)" }
+// ═══════════════ 168개 초기 회원사 ═══════════════
+const INITIAL_MEMBERS = [
+  {biz:'구글코리아(유)',reg:'120-86-65164',addr:'서울특별시 강남구 테헤란로 152 역삼동 강남파이낸스센터 22층'},
+  {biz:'그랑몬스터㈜',reg:'220-88-04194',addr:'서울특별시 강남구 삼성로 511 골든타워 5층'},
+  {biz:'㈜그루컴퍼니',reg:'220-88-80926',addr:'서울특별시 성동구 성수이로 10길 14, 에이스하이엔드성수타워 1201,1202,1203호'},
+  {biz:'㈜나무커뮤니케이션',reg:'120-86-46264',addr:'서울특별시 송파구 중대로 135, 13층 서관 1301호'},
+  {biz:'주식회사 케이티나스미디어',reg:'220-81-80363',addr:'서울특별시 강남구 도곡로1길 14, 3층 4층, 5층'},
+  {biz:'네이버㈜',reg:'220-81-62517',addr:'경기도 성남시 분당구 정자일로 95'},
+  {biz:'㈜넥스트미디어그룹',reg:'545-81-00889',addr:'서울특별시 강남구 언주로 637, 13층(논현동, 싸이칸타워)'},
+  {biz:'㈜다츠',reg:'204-81-39066',addr:'서울특별시 서초구 방배동 753-12'},
+  {biz:'㈜다트미디어',reg:'107-86-93497',addr:'서울특별시 영등포구 양평동 3가 15-1 월드메르디앙비즈센터 407호'},
+  {biz:'㈜더에스엠씨',reg:'108-81-93684',addr:'서울특별시 강남구 봉은사로49길 22, 더에스엠씨빌딩 2층'},
+  {biz:'㈜드림인사이트',reg:'114-87-03025',addr:'서울특별시 구로구 디지털로33길 12, 우림이비지센터2차 14층'},
+  {biz:'㈜디뉴먼트',reg:'172-86-00221',addr:'서울특별시 금천구 가산디지털2로 108, 502호, 907호'},
+  {biz:'㈜디엑스이',reg:'581-81-00925',addr:'서울특별시 중구 동호로 330, 8층'},
+  {biz:'㈜디지털다임',reg:'211-86-90483',addr:'서울특별시 용산구 한남동 대사관로11길 41 디투인터랙티브 빌딩'},
+  {biz:'㈜디지털트리니티',reg:'211-88-21544',addr:'서울특별시 용산구 서빙고로 17, 센트럴파크타워 24층'},
+  {biz:'디지털퍼스트㈜',reg:'770-81-00660',addr:'서울특별시 용산구 서빙고로 17, 센트럴파크타워 25층'},
+  {biz:'㈜디트라이브',reg:'220-86-10218',addr:'서울특별시 성동구 왕십리로 125, 1002호'},
+  {biz:'㈜디퍼플',reg:'211-88-70292',addr:'서울특별시 강남구 언주로 609 (논현동, 팍스타워) A동 7층'},
+  {biz:'㈜디플랜360',reg:'647-86-01398',addr:'서울특별시 강남구 테헤란로 443, 11층'},
+  {biz:'리머지(유)',reg:'655-81-01701',addr:'서울특별시 강남구 선릉로 428, 14층 126호'},
+  {biz:'㈜리서치애드',reg:'220-86-93863',addr:'서울특별시 강남구 학동로34길 16 티플러스빌딩 2층'},
+  {biz:'㈜마더브레인',reg:'211-88-24084',addr:'서울특별시 서초구 서초대로 77길 서초W타워 15-16층'},
+  {biz:'㈜망고스타코리아',reg:'443-86-00365',addr:'서울특별시 강남구 선릉로 91길 14, 선릉빌딩 402호'},
+  {biz:'㈜매드업',reg:'119-87-06634',addr:'서울특별시 서초구 서초대로 74길 4, 삼성생명서초타워 20층'},
+  {biz:'㈜매드코퍼레이션',reg:'365-88-01262',addr:'서울특별시 강남구 테헤란로 123, 15층 1501호'},
+  {biz:'㈜씨제이메조미디어',reg:'120-81-88352',addr:'서울특별시 중구 동호로 330, 4층'},
+  {biz:'㈜모비데이즈',reg:'832-87-01824',addr:'서울특별시 강남구 언주로 417, 지하1층-8층'},
+  {biz:'㈜모티브인텔리전스',reg:'212-86-09248',addr:'서울특별시 강남구 테헤란로 132, 13층'},
+  {biz:'㈜미래아이엔씨',reg:'106-81-93204',addr:'서울특별시 금천구 가산디지털2로 144, 13층'},
+  {biz:'주식회사 미래피엠피',reg:'742-81-02251',addr:'서울특별시 강남구 언주로149길 9(논현동, 시엘빌딩)'},
+  {biz:'주식회사 바이너리큐브',reg:'211-88-78353',addr:'서울특별시 성동구 성수이로 147, 506호 507호'},
+  {biz:'㈜버즈빌',reg:'119-86-55841',addr:'서울특별시 송파구 석촌호수로 272 엠와이빌딩 2-5층'},
+  {biz:'㈜베리타스커넥트',reg:'220-86-45056',addr:'서울특별시 서초구 강남대로331, 9층'},
+  {biz:'볼디㈜',reg:'556-88-02095',addr:'서울특별시 강남구 압구정로 36길 12, 6층'},
+  {biz:'봄센㈜',reg:'516-88-00648',addr:'서울특별시 성동구 광나루로 176 4,5층'},
+  {biz:'주식회사 블루오렌지커뮤니케이션즈',reg:'264-81-37022',addr:'서울특별시 서초구 서초대로48길 33, 3층 301호'},
+  {biz:'㈜비욘드마케팅그룹',reg:'120-86-46551',addr:'서울특별시 강남구 논현로 651 대한법무사회관 1, 5,6층'},
+  {biz:'㈜비즈스프링',reg:'120-86-63550',addr:'서울특별시 성동구 광나루로 130 서울숲IT캐슬'},
+  {biz:'㈜생각하는늑대',reg:'760-81-00931',addr:'서울특별시 강남구 테헤란로82길 15, 14층'},
+  {biz:'㈜수커뮤니케이션',reg:'220-88-00446',addr:'서울특별시 성동구 성수일로8길 5, 서울숲SK V1타워 A동 1204호'},
+  {biz:'㈜스타디엠코퍼레이션',reg:'181-86-01734',addr:'경기도 부천시 신흥로 234, 3층'},
+  {biz:'㈜스파클인터렉티브',reg:'264-81-08304',addr:'서울특별시 강남구 논현로 746, 4층'},
+  {biz:'주식회사 씨더블유',reg:'265-88-00736',addr:'서울특별시 강남구 도산대로16길 13-20, 지하 1층'},
+  {biz:'㈜아이디어키',reg:'220-87-07893',addr:'서울특별시 송파구 백제고분로 362, 3,4층'},
+  {biz:'㈜아이애드원',reg:'101-86-49275',addr:'서울특별시 서초구 서초대로 250 스타갤러리브릿지빌딩 12층'},
+  {biz:'주식회사 아이지에이웍스',reg:'220-87-41741',addr:'서울특별시 용산구 서빙고로 17, 24,25,26층'},
+  {biz:'㈜아인스미디어',reg:'109-86-20253',addr:'서울특별시 금천구 가산디지털2로 144, 19층'},
+  {biz:'㈜아치서울',reg:'804-81-01036',addr:'서울특별시 광진구 광나루로 478 광진경제허브센터 도약관 303호'},
+  {biz:'주식회사 숲',reg:'220-81-10886',addr:'경기도 성남시 분당구 판교로228번길 15'},
+  {biz:'애니포인트미디어㈜',reg:'696-88-00075',addr:'서울특별시 강남구 테헤란로87길 21, 6층'},
+  {biz:'㈜애드게이트',reg:'215-86-78948',addr:'서울특별시 성동구 성수동1가 13-214 동진아이티타워 12층'},
+  {biz:'㈜애드미션',reg:'220-86-54614',addr:'서울특별시 서초구 서운로 9길 14, 일석빌딩 4층, 5층'},
+  {biz:'애드온컴퍼니㈜',reg:'220-88-61138',addr:'서울특별시 송파구 올림픽로 269, 803호'},
+  {biz:'㈜애드이피션시',reg:'264-81-02917',addr:'서울특별시 서초구 효령로77길 28 동오빌딩 4층, 6층'},
+  {biz:'주식회사 애드쿠아인터렉티브',reg:'211-87-25387',addr:'서울특별시 강남구 언주로 637, 2,3,4층'},
+  {biz:'네이트커뮤니케이션즈 주식회사',reg:'220-81-37906',addr:'서울특별시 중구 소월로2길 30'},
+  {biz:'㈜에이디쏠인터렉티브',reg:'602-87-01640',addr:'서울특별시 성동구 성수일로10길 26, 15층'},
+  {biz:'㈜에이엠피엠글로벌',reg:'105-86-67746',addr:'서울특별시 금천구 가산디지털2로 144, 11층 1101호'},
+  {biz:'㈜에이원퍼포먼스팩토리',reg:'120-88-17220',addr:'서울특별시 강남구 테헤란로83길32, 나라키움빌딩 A동 4층'},
+  {biz:'㈜에이전시더블유',reg:'120-86-45135',addr:'서울특별시 강남구 봉은사로 49길 7 대양빌딩 2층'},
+  {biz:'㈜에이치에스애드',reg:'105-81-29368',addr:'서울특별시 마포구 마포대로 155 LG마포빌딩'},
+  {biz:'주식회사 엔비티',reg:'211-88-83652',addr:'서울특별시 강남구 논현로 145길 31'},
+  {biz:'엔에이치엔애드㈜',reg:'144-81-27690',addr:'경기도 성남시 분당구 대왕판교로645번길 16, NHN 플레이뮤지엄 5층'},
+  {biz:'㈜엔에이치엔에이스',reg:'313-81-35670',addr:'경기도 성남시 분당구 대왕판교로 645번길 16, 플레이뮤지엄 NHN ACE'},
+  {biz:'㈜엘지씨엔에스',reg:'116-81-19477',addr:'서울특별시 강서구 마곡중앙8로 71'},
+  {biz:'㈜엠코퍼레이션',reg:'534-87-00616',addr:'서울특별시 강남구 논현로 503, 12층'},
+  {biz:'주식회사 엠투디지털',reg:'102-81-43774',addr:'서울특별시 용산구 한강대로 372 KDB생명타워 13층'},
+  {biz:'㈜엠플랜잇',reg:'345-86-01551',addr:'서울특별시 강남구 언주로93길 21, 5층'},
+  {biz:'㈜엠피인터랙티브',reg:'113-86-41728',addr:'서울특별시 구로구 디지털로 306 대륭포스트타워 2차 607호'},
+  {biz:'㈜엣지랭크',reg:'211-88-82541',addr:'서울특별시 강남구 언주로 133길 26-5'},
+  {biz:'㈜예지솔루션',reg:'211-87-59290',addr:'서울특별시 금천구 가산디지털2로 166, 3층'},
+  {biz:'㈜오버맨',reg:'503-87-00058',addr:'서울특별시 서초구 강남대로 85길 20'},
+  {biz:'온더플래닛㈜',reg:'182-87-01578',addr:'서울특별시 중구 통일로10, 17층'},
+  {biz:'㈜아티스트유나이티드',reg:'114-86-82149',addr:'서울특별시 강남구 도산대로 430, 3층'},
+  {biz:'㈜와이즈버즈',reg:'703-86-00909',addr:'경기도 성남시 수정구 금토로 69, 5층'},
+  {biz:'㈜와일리',reg:'211-88-56742',addr:'서울특별시 강남구 학동로 336, 5층'},
+  {biz:'㈜위시미디어',reg:'495-86-00691',addr:'서울특별시 강남구 테헤란로 79길11 A타워 3층'},
+  {biz:'㈜위플랫폼',reg:'467-81-00594',addr:'서울특별시 금천구 가산디지털1로 165, 가산비즈니스센터 601호'},
+  {biz:'㈜유어비즈',reg:'220-87-31452',addr:'서울특별시 송파구 송파대로 167, 에이동 1222호'},
+  {biz:'㈜이너스커뮤니티',reg:'220-81-75706',addr:'서울특별시 마포구 양화로 147, 5층'},
+  {biz:'㈜이레컴즈',reg:'120-87-41500',addr:'서울특별시 구로구 디지털로 273 에이스트윈타워2차 306호'},
+  {biz:'㈜이스터씨앤아이',reg:'211-87-45554',addr:'서울특별시 강남구 삼성로 134길 8'},
+  {biz:'크리에이터링 주식회사',reg:'503-87-03360',addr:'서울특별시 서초구 바우뫼로27길 7-11, 대송빌딩 1층'},
+  {biz:'㈜이엠넷',reg:'214-86-56053',addr:'서울특별시 구로구 디지털로34길 27 대륭포스트타워 3차 14층'},
+  {biz:'㈜이인벤션',reg:'109-86-17438',addr:'서울특별시 구로구 디지털로31길 38-21, 10층 1009호'},
+  {biz:'(유)이프로애드',reg:'214-87-64680',addr:'서울특별시 강남구 선릉로 642, 3층'},
+  {biz:'㈜인라이플',reg:'113-86-60934',addr:'서울특별시 구로구 디지털로 272 한신아이티타워 501~504호'},
+  {biz:'㈜인크로스',reg:'214-88-13475',addr:'서울특별시 관악구 남부순환로 1926'},
+  {biz:'㈜인터웍스미디어',reg:'120-87-28467',addr:'서울특별시 강남구 테헤란로 534 글라스타워빌딩 30층'},
+  {biz:'Integral Ad Science Japan K.K',reg:'0104-01-117454',addr:'1-1-2 Yurakucho Chiyoda-ku, Tokyo, Japan'},
+  {biz:'㈜제이브릿지컴퍼니',reg:'144-81-25649',addr:'경기도 성남시 분당구 성남대로331번길 8, 606,607호'},
+  {biz:'㈜제이슨그룹',reg:'220-87-01996',addr:'서울특별시 용산구 서빙고로 17, 센트럴파크타워 26~27층'},
+  {biz:'㈜제일기획',reg:'202-81-45960',addr:'서울특별시 용산구 이태원로 222'},
+  {biz:'젤리피쉬코리아(유)',reg:'265-87-01169',addr:'서울특별시 서초구 강남대로 373'},
+  {biz:'㈜차이커뮤니케이션',reg:'211-87-51624',addr:'서울특별시 강남구 논현로 132길 40'},
+  {biz:'㈜카카오',reg:'120-81-47521',addr:'제주특별자치도 제주시 첨단로 242'},
+  {biz:'카페24 주식회사',reg:'118-81-20586',addr:'서울특별시 동작구 보라매로5길 15'},
+  {biz:'㈜케이피알앤드어소시에이츠',reg:'203-81-61115',addr:'서울특별시 중구 퇴계로 173, 남산스퀘어 14층'},
+  {biz:'주식회사 코마스인터렉티브',reg:'211-88-15173',addr:'서울특별시 강남구 학동로 311'},
+  {biz:'주식회사 코비그룹',reg:'706-81-00941',addr:'서울특별시 강남구 도산대로4길15, 6층'},
+  {biz:'크리테오코리아(유)',reg:'559-88-01270',addr:'서울특별시 강남구 테헤란로 152 강남파이낸스센터 41층'},
+  {biz:'㈜키스톤마케팅컴퍼니',reg:'211-88-43738',addr:'서울특별시 서초구 서초대로78길 5, 대각빌딩 13층'},
+  {biz:'㈜토이306',reg:'201-86-04355',addr:'서울특별시 강남구 테헤란로79길 6, 5층'},
+  {biz:'㈜트리플하이엠',reg:'220-86-93067',addr:'서울특별시 금천구 디지털로 121 에이스가산타워 10층'},
+  {biz:'㈜티디아이플레이',reg:'601-81-37139',addr:'서울특별시 서초구 서초대로 64길 8, 4층'},
+  {biz:'㈜티엠씨케이',reg:'107-87-79319',addr:'서울특별시 서초구 강남대로263, 3,5층'},
+  {biz:'TikTok Pte. Ltd.',reg:'201719908M',addr:'서울특별시 강남구 테헤란로 518 섬유센터, 12층'},
+  {biz:'㈜판도라티비',reg:'220-81-57969',addr:'경기도 성남시 분당구 대왕판교로644번길 49, 11층'},
+  {biz:'㈜퍼틸레인',reg:'211-88-36090',addr:'서울특별시 강남구 봉은사로86길 6 빌딩레베쌍트 8층'},
+  {biz:'주식회사 퍼포먼스바이티비더블유에이',reg:'504-88-00873',addr:'서울특별시 중구 세종대로 39, 5층'},
+  {biz:'피코코리아 주식회사',reg:'116-81-43166',addr:'서울특별시 강남구 언주로 804, 2층 201호'},
+  {biz:'주식회사 펜타브리드',reg:'114-86-12129',addr:'서울특별시 서초구 서운로26길 9'},
+  {biz:'메가존㈜',reg:'214-86-79342',addr:'서울특별시 강남구 학동로23길 18 펜타클빌딩'},
+  {biz:'주식회사 프로그레스미디어',reg:'113-86-27124',addr:'서울특별시 구로구 디지털로26길 43, L동 19층'},
+  {biz:'㈜플레이디',reg:'129-86-43885',addr:'경기도 성남시 분당구 황새울로 359번길 11, 5~6층'},
+  {biz:'㈜피알원',reg:'110-81-75199',addr:'서울특별시 서대문구 충정로 70, 19층'},
+  {biz:'㈜픽스다인무브먼트',reg:'893-87-02148',addr:'서울특별시 강남구 테헤란로 501, 6층 601호'},
+  {biz:'㈜하나애드아이엠씨',reg:'117-81-48164',addr:'서울특별시 영등포구 여의도동 17-3 삼환까뮤빌딩 2층'},
+  {biz:'페리온',reg:'캐나다 법인',addr:'서울특별시 강남구 영동대로 417 오토웨이타워'},
+  {biz:'주식회사 오피엠에스',reg:'220-87-03688',addr:'서울특별시 강남구 역삼로 555, 1층 101호'},
+  {biz:'㈜함샤우트글로벌',reg:'882-86-01894',addr:'서울특별시 마포구 포은로2가길 57, 한울빌딩'},
+  {biz:'㈜휴먼미디어그룹',reg:'736-81-00321',addr:'경기도 부천시 길주로 279, 서호빌딩 601호'},
+  {biz:'㈜이노션',reg:'220-87-09310',addr:'서울특별시 강남구 강남대로 308'},
+  {biz:'㈜비바리퍼블리카',reg:'120-88-01280',addr:'서울특별시 강남구 테헤란로 142, 아크플레이스'},
+  {biz:'비에이티㈜',reg:'567-87-00493',addr:'서울특별시 강남구 논현로153길 53, 4층'},
+  {biz:'주식회사 호잇커뮤니케이션즈',reg:'707-88-02918',addr:'서울특별시 강남구 선릉로94길 12, 6층'},
+  {biz:'주식회사더쏠트',reg:'395-87-02057',addr:'서울특별시 강남구 삼성로95길 6, 5층'},
+  {biz:'주식회사 크로마엔터테인먼트',reg:'333-86-02300',addr:'서울특별시 강남구 테헤란로83길 15, 6층'},
+  {biz:'㈜나인독',reg:'751-87-02354',addr:'서울특별시 성동구 성수일로 56, 1105호, 1106호'},
+  {biz:'주식회사 함파트너스',reg:'106-86-49566',addr:'서울특별시 마포구 마포대로 89, 4층'},
+  {biz:'주식회사 엠서치마케팅',reg:'495-86-02326',addr:'서울특별시 금천구 벚꽃로 298 대룡포스트타워6차 907호'},
+  {biz:'주식회사 몽규',reg:'865-86-01676',addr:'서울특별시 마포구 성미산로 103'},
+  {biz:'주식회사 레뷰코퍼레이션',reg:'261-81-22044',addr:'서울특별시 강남구 논현로 135길 29'},
+  {biz:'㈜벨커뮤니케이션즈',reg:'110-81-33831',addr:'서울특별시 서대문구 충정로 8, 8층 804호'},
+  {biz:'㈜포이시스',reg:'120-86-14175',addr:'서울특별시 금천구 가산디지털1로 137, 1101호'},
+  {biz:'커뮤니크㈜',reg:'106-86-12981',addr:'서울특별시 용산구 한강대로44길 14'},
+  {biz:'PTKOREA',reg:'214-84-06262',addr:'서울특별시 강남구 강남대로 372, FINE TOWER'},
+  {biz:'애드커넥스 주식회사',reg:'451-81-03048',addr:'서울특별시 영등포구 당산로 141, 5층'},
+  {biz:'주식회사 스마일코리아',reg:'109-86-39941',addr:'서울특별시 금천구 가산디지털1로 168, B동 9층'},
+  {biz:'주식회사 커스텀그라운드',reg:'562-86-02500',addr:'서울특별시 서초구 방배로 97, 3층'},
+  {biz:'주식회사 가치브라더',reg:'119-86-81107',addr:'서울특별시 구로구 디지털로31길 19, 404호'},
+  {biz:'주식회사 잘함',reg:'860-86-00013',addr:'서울특별시 용산구 우사단로 14길 74'},
+  {biz:'주식회사 스냅컴퍼니',reg:'858-88-00654',addr:'서울특별시 강남구 테헤란로32길 27'},
+  {biz:'주식회사 퍼즐코퍼레이션',reg:'703-81-02391',addr:'서울특별시 마포구 양화로81, H스퀘어'},
+  {biz:'주식회사 카카오페이',reg:'527-88-00686',addr:'경기도 성남시 분당구 판교역로 166, 비동15층'},
+  {biz:'주식회사 이엠씨지',reg:'220-88-03176',addr:'서울특별시 용산구 한강대로15길 9-5, 402호'},
+  {biz:'하이브월드와이드 주식회사',reg:'220-88-11002',addr:'서울특별시 성동구 연무장5길 9-16, 11층 1101호'},
+  {biz:'더트레이드데스크 주식회사',reg:'120-88-12448',addr:'서울특별시 강남구 테헤란로 152, 41층'},
+  {biz:'닐슨미디어코리아 유한회사',reg:'303-87-00138',addr:'서울특별시 중구 서소문로 50, 15층'},
+  {biz:'주식회사 케이앤웍스',reg:'201-81-90900',addr:'제주특별자치도 제주시 첨단로242, 2층'},
+  {biz:'주식회사 포바이포',reg:'712-87-00690',addr:'서울특별시 서초구 강남대로 479, 12층'},
+  {biz:'애디플 주식회사',reg:'173-87-02933',addr:'서울특별시 구로구 디지털로30길 31, 1407호'},
+  {biz:'엑솔라코리아 유한회사',reg:'120-88-20050',addr:'서울특별시 강남구 테헤란로 412, 13층'},
+  {biz:'주식회사 제이비컴스컴퍼니',reg:'106-86-48271',addr:'경기도 고양시 덕양구 으뜸로8, 13층 1305호'},
+  {biz:'주식회사 엘리케이트',reg:'178-86-01325',addr:'서울특별시 강남구 봉은사로26길 22-12, 102호'},
+  {biz:'투겟 주식회사',reg:'448-86-03426',addr:'서울특별시 구로구 디지털로26길 43, 제12층'},
+  {biz:'주식회사 부스터즈',reg:'455-86-01557',addr:'서울특별시 강남구 언주로 637, 12층'},
+  {biz:'주식회사 써치엠',reg:'211-88-14382',addr:'서울특별시 강남구 논현로 319, 3층,4층'},
+  {biz:'주식회사 지엔앰퍼포먼스',reg:'211-88-76923',addr:'서울특별시 강남구 봉은사로 114, 2층'},
+  {biz:'주식회사 씨브이쓰리',reg:'891-81-02188',addr:'서울특별시 서초구 서초대로77길 39, 8층 801호'},
+  {biz:'㈜어센드미디어',reg:'148-86-02380',addr:'서울특별시 금천구 가산디지털2로 144, 807~808'},
+  {biz:'얀고애즈',reg:'1802868',addr:'UAE, Dubai, Trade Center Second, The Offices 5'},
+  {biz:'주식회사 이엔미디어',reg:'183-87-00290',addr:'서울특별시 강서구 강서로56가길 141, 6층'},
+  {biz:'주식회사 유디엠',reg:'119-86-49825',addr:'서울특별시 금천구 가산디지털2로135, 1동16층'},
+  {biz:'주식회사 트레져헌터',reg:'120-88-23509',addr:'서울특별시 성동구 성수이로20길 16, 8층'},
+  {biz:'주식회사 런커뮤니케이션즈',reg:'853-88-00057',addr:'서울특별시 성동구 뚝섬로1길 25, 9층 903호'},
+  {biz:'주식회사 벡터컴',reg:'211-88-21068',addr:'서울특별시 강남구 테헤란로26길 14 위워크빌딩 9층'},
+  {biz:'주식회사 히히',reg:'507-81-17393',addr:'서울특별시 강남구 강남대로128길 81, 4층'}
 ];
 
-// ═══════════════════════════════════════
-// 상태 (localStorage에 저장)
-// ═══════════════════════════════════════
-function loadState() {
-  const raw = localStorage.getItem('koda_state');
-  if (raw) return JSON.parse(raw);
-  // 최초 초기화
+// ═══════════════ 상태 관리 (localStorage) ═══════════════
+function loadState(){
+  const raw=localStorage.getItem('koda_v3');
+  if(raw) return JSON.parse(raw);
   return {
-    org: {...DEFAULT_ORG},
-    members: INITIAL_PARTICIPANTS.map((p,i) => ({
-      ...p,
-      detail: DEFAULT_ORG.event,
-      date: DEFAULT_ORG.date,
-      amount: DEFAULT_ORG.amount,
-      serial: DEFAULT_ORG.prefix + '-' + DEFAULT_ORG.date.replace(/-/g,'').slice(2) + '-' + String(i+1).padStart(2,'0'),
-      paid: false
+    org:{...DEFAULT_ORG},
+    members:INITIAL_MEMBERS.map((m,i)=>({
+      ...m,
+      detail:DEFAULT_ORG.event,
+      date:DEFAULT_ORG.date,
+      amount:DEFAULT_ORG.amount,
+      serial:DEFAULT_ORG.prefix+'-'+DEFAULT_ORG.date.replace(/-/g,'').slice(2)+'-'+String(i+1).padStart(2,'0'),
+      paid:false
     }))
   };
 }
+function save(){localStorage.setItem('koda_v3',JSON.stringify(state))}
+let state=loadState();
 
-function saveState() {
-  localStorage.setItem('koda_state', JSON.stringify(state));
+// ═══════════════ 화면 전환 ═══════════════
+function hide(id){document.getElementById(id).style.display='none'}
+function showAdminPw(){document.getElementById('adminPwBox').style.display='block';document.getElementById('pwInput').focus()}
+function checkPw(){
+  if(document.getElementById('pwInput').value===state.org.pw){goAdmin()}
+  else{document.getElementById('pwError').style.display='block'}
 }
+function goAdmin(){
+  hide('modePage');hide('lookupPage');hide('receiptPage');
+  document.getElementById('adminPage').style.display='block';
+  document.getElementById('adminTitle').textContent='어드민 — '+state.org.name;
+  loadSettings();renderTable();
+}
+function showLookup(){
+  hide('modePage');hide('adminPage');hide('receiptPage');
+  const lp=document.getElementById('lookupPage');
+  lp.style.display='flex';
+  document.getElementById('lookupOrg').textContent=state.org.name;
+  document.getElementById('lookupDesc').textContent=state.org.event+' 참가비 영수증을 발급받으실 수 있습니다.\n사업자등록번호를 입력해 주세요.';
+  document.getElementById('lookupFooter').textContent='문의: '+state.org.name;
+}
+function goMode(){
+  hide('adminPage');hide('lookupPage');hide('receiptPage');
+  document.getElementById('modePage').style.display='flex';
+  document.getElementById('adminPwBox').style.display='none';
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwError').style.display='none';
+}
+function goLookup(){hide('receiptPage');showLookup()}
 
-let state = loadState();
-
-// ═══════════════════════════════════════
-// 화면 전환
-// ═══════════════════════════════════════
-function showAdminPw() {
-  document.getElementById('adminPwBox').style.display = 'block';
-  document.getElementById('pwInput').focus();
-}
-function checkPw() {
-  const pw = document.getElementById('pwInput').value;
-  if (pw === state.org.pw) {
-    goAdmin();
-  } else {
-    document.getElementById('pwError').style.display = 'block';
-  }
-}
-function goAdmin() {
-  hide('modePage'); hide('lookupPage'); hide('receiptPage');
-  document.getElementById('adminPage').style.display = 'block';
-  loadSettings();
-  renderTable();
-  updateStats();
-}
-function showLookup() {
-  hide('modePage'); hide('adminPage'); hide('receiptPage');
-  document.getElementById('lookupPage').style.display = 'flex';
-  document.getElementById('lookupOrg').textContent = state.org.name;
-  document.getElementById('lookupDesc').textContent = state.org.event + ' 참가비 영수증을 발급받으실 수 있습니다.\n사업자등록번호를 입력해 주세요.';
-  document.getElementById('lookupFooter').textContent = '문의: ' + state.org.name;
-}
-function goMode() {
-  hide('adminPage'); hide('lookupPage'); hide('receiptPage');
-  document.getElementById('modePage').style.display = 'flex';
-  document.getElementById('adminPwBox').style.display = 'none';
-  document.getElementById('pwInput').value = '';
-  document.getElementById('pwError').style.display = 'none';
-}
-function goLookup() { hide('receiptPage'); showLookup(); }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-
-// ═══════════════════════════════════════
-// 어드민 — 탭
-// ═══════════════════════════════════════
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  event.target.classList.add('active');
+// ═══════════════ 탭 전환 ═══════════════
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 }
 
-// ═══════════════════════════════════════
-// 어드민 — 회원사 목록
-// ═══════════════════════════════════════
-function renderTable() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const filter = document.getElementById('filterPaid').value;
-  const tbody = document.getElementById('memberTbody');
-
-  const filtered = state.members.filter((m,i) => {
-    const matchQ = !q || m.biz.toLowerCase().includes(q) || m.reg.includes(q);
-    const matchF = filter==='all' || (filter==='paid'&&m.paid) || (filter==='unpaid'&&!m.paid);
-    return matchQ && matchF;
+// ═══════════════ 회원사 목록 ═══════════════
+function renderTable(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const f=document.getElementById('filterPaid').value;
+  const filtered=state.members.filter(m=>{
+    const mq=!q||m.biz.toLowerCase().includes(q)||m.reg.includes(q);
+    const mf=f==='all'||(f==='paid'&&m.paid)||(f==='unpaid'&&!m.paid);
+    return mq&&mf;
   });
-
-  tbody.innerHTML = filtered.map((m, fi) => {
-    const realIdx = state.members.indexOf(m);
-    return `<tr>
-      <td style="color:var(--muted);text-align:center">${realIdx+1}</td>
+  document.getElementById('memberTbody').innerHTML=filtered.map(m=>`
+    <tr>
+      <td style="color:var(--muted);text-align:center">${state.members.indexOf(m)+1}</td>
       <td style="font-weight:500">${m.biz}</td>
-      <td style="font-family:monospace;font-size:12px">${m.reg}</td>
+      <td style="font-family:monospace">${m.reg}</td>
       <td style="color:var(--muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.addr}</td>
-      <td>
-        <div class="toggle-wrap">
-          <label class="toggle">
-            <input type="checkbox" ${m.paid?'checked':''} onchange="togglePaid(${realIdx},this.checked)"/>
-            <span class="toggle-slider"></span>
-          </label>
-          <span class="badge ${m.paid?'badge-paid':'badge-unpaid'}" id="badge-${realIdx}">${m.paid?'입금':'미입금'}</span>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-
-  updateStats();
+      <td style="text-align:center"><span class="badge ${m.paid?'badge-paid':'badge-unpaid'}">${m.paid?'입금완료':'미입금'}</span></td>
+    </tr>`).join('');
+  const paid=state.members.filter(m=>m.paid).length;
+  document.getElementById('statTotal').textContent=state.members.length;
+  document.getElementById('statPaid').textContent=paid;
+  document.getElementById('statUnpaid').textContent=state.members.length-paid;
+}
+function resetAllPaid(){
+  if(!confirm('입금 현황을 전체 초기화할까요?'))return;
+  state.members.forEach(m=>m.paid=false);
+  save();renderTable();
 }
 
-function togglePaid(idx, val) {
-  state.members[idx].paid = val;
-  saveState();
-  renderTable();
+// ═══════════════ 은행 입금 매칭 ═══════════════
+let pendingMatches=[];
+
+function normalize(str){
+  return str.replace(/[\s\(\)㈜주식회사(주)(유)유한회사]/g,'').toLowerCase();
 }
 
-function markAll(val) {
-  if (!confirm(val ? '전체 입금처리 하시겠습니까?' : '전체 초기화 하시겠습니까?')) return;
-  state.members.forEach(m => m.paid = val);
-  saveState();
-  renderTable();
-}
+function matchBank(){
+  const text=document.getElementById('bankPaste').value.trim();
+  if(!text){alert('입금 내역을 붙여넣어 주세요.');return;}
 
-function updateStats() {
-  const total = state.members.length;
-  const paid = state.members.filter(m => m.paid).length;
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statPaid').textContent = paid;
-  document.getElementById('statUnpaid').textContent = total - paid;
-}
+  const lines=text.split('\n').filter(l=>l.trim());
+  pendingMatches=[];
 
-// ═══════════════════════════════════════
-// 어드민 — 엑셀 붙여넣기
-// ═══════════════════════════════════════
-function importPaste() {
-  const text = document.getElementById('pasteArea').value.trim();
-  if (!text) return;
-  const lines = text.split('\n').filter(l => l.trim());
-  const org = state.org;
-  let count = 0;
-  const newMembers = [];
-  lines.forEach((line, i) => {
-    const cols = line.split('\t');
-    if (cols.length < 2) return;
-    newMembers.push({
-      biz: (cols[0]||'').trim(),
-      reg: (cols[1]||'').trim(),
-      addr: (cols[2]||'').trim(),
-      detail: (cols[3]||org.event).trim(),
-      date: (cols[4]||org.date).trim(),
-      amount: Number((cols[5]||org.amount).toString().replace(/,/g,'')),
-      serial: org.prefix + '-' + (org.date||'').replace(/-/g,'').slice(2) + '-' + String(i+1).padStart(2,'0'),
-      paid: false
-    });
-    count++;
+  lines.forEach(line=>{
+    const cols=line.split('\t');
+    if(cols.length<3)return;
+    // G열(7번째) 우선, 없으면 D열(4번째) 사용
+    const nameRaw=(cols[6]||cols[3]||'').trim();
+    const amtRaw=(cols[2]||'').trim();
+    const amt=Number(amtRaw.replace(/,/g,''));
+    if(!nameRaw||!amt)return;
+
+    // 회원사 명단에서 매칭
+    const normInput=normalize(nameRaw);
+    const matched=state.members.find(m=>normalize(m.biz).includes(normInput)||normInput.includes(normalize(m.biz)));
+
+    pendingMatches.push({nameRaw,amt,matched:matched||null});
   });
-  if (count === 0) { alert('데이터를 인식할 수 없습니다.'); return; }
-  if (!confirm(count + '개 항목을 불러옵니다. 기존 데이터는 초기화됩니다. 계속하시겠습니까?')) return;
-  state.members = newMembers;
-  saveState();
-  document.getElementById('pasteResult').textContent = '✅ ' + count + '개 불러오기 완료';
+
+  const matchedCount=pendingMatches.filter(p=>p.matched).length;
+  const unmatchedCount=pendingMatches.filter(p=>!p.matched).length;
+
+  document.getElementById('matchSummary').innerHTML=
+    `총 <strong>${pendingMatches.length}건</strong> 중 <span style="color:var(--success);font-weight:700">${matchedCount}건 매칭</span>, <span style="color:var(--danger);font-weight:700">${unmatchedCount}건 미매칭</span>`;
+
+  document.getElementById('matchResultList').innerHTML=pendingMatches.map((p,i)=>`
+    <div class="match-item ${p.matched?'matched':'unmatched'}">
+      <div>
+        <div class="name">${p.nameRaw} ${p.matched?'→ <span style="opacity:.7">'+p.matched.biz+'</span>':''}</div>
+        <div class="amt">${p.amt.toLocaleString('ko-KR')}원</div>
+      </div>
+      <span class="status">${p.matched?'매칭됨':'미매칭'}</span>
+    </div>`).join('');
+
+  document.getElementById('applyBar').style.display='flex';
+  document.getElementById('applyNote').textContent=matchedCount+'개 업체 입금 처리됩니다.';
+}
+
+function applyMatch(){
+  if(!pendingMatches.length)return;
+  const matched=pendingMatches.filter(p=>p.matched);
+  if(!confirm(matched.length+'개 업체를 입금 처리할까요?'))return;
+  matched.forEach(p=>{
+    const idx=state.members.indexOf(p.matched);
+    if(idx>-1)state.members[idx].paid=true;
+  });
+  save();
   renderTable();
-  switchTab('tab-list');
-  document.querySelectorAll('.tab-btn')[0].classList.add('active');
-  document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+  alert('✅ '+matched.length+'개 업체 입금 처리 완료!');
+  // 목록 탭으로 이동
+  document.querySelectorAll('.tab-btn')[0].click();
 }
 
-// ═══════════════════════════════════════
-// 어드민 — 설정
-// ═══════════════════════════════════════
-function loadSettings() {
-  const o = state.org;
-  document.getElementById('s-name').value = o.name||'';
-  document.getElementById('s-reg').value = o.reg||'';
-  document.getElementById('s-addr').value = o.addr||'';
-  document.getElementById('s-prefix').value = o.prefix||'';
-  document.getElementById('s-event').value = o.event||'';
-  document.getElementById('s-date').value = o.date||'';
-  document.getElementById('s-amount').value = o.amount||'';
-}
-function saveSettings() {
-  const newPw = document.getElementById('s-pw').value;
-  state.org.name   = document.getElementById('s-name').value;
-  state.org.reg    = document.getElementById('s-reg').value;
-  state.org.addr   = document.getElementById('s-addr').value;
-  state.org.prefix = document.getElementById('s-prefix').value;
-  state.org.event  = document.getElementById('s-event').value;
-  state.org.date   = document.getElementById('s-date').value;
-  state.org.amount = Number(document.getElementById('s-amount').value);
-  if (newPw) state.org.pw = newPw;
-  saveState();
-  const msg = document.getElementById('saveMsg');
-  msg.textContent = '✅ 저장되었습니다';
-  setTimeout(() => msg.textContent='', 2000);
-  document.getElementById('adminTitle').textContent = '어드민 — ' + state.org.name;
+// ═══════════════ 회원사 교체 ═══════════════
+function importMembers(){
+  const text=document.getElementById('memberPaste').value.trim();
+  if(!text)return;
+  const lines=text.split('\n').filter(l=>l.trim());
+  const org=state.org;
+  const newMembers=[];
+  lines.forEach((line,i)=>{
+    const c=line.split('\t');
+    if(!c[0])return;
+    newMembers.push({
+      biz:c[0].trim(),reg:(c[1]||'').trim(),addr:(c[2]||'').trim(),
+      detail:(c[3]||org.event).trim(),date:(c[4]||org.date).trim(),
+      amount:Number((c[5]||org.amount).toString().replace(/,/g,'')),
+      serial:org.prefix+'-'+(org.date||'').replace(/-/g,'').slice(2)+'-'+String(i+1).padStart(2,'0'),
+      paid:false
+    });
+  });
+  if(!newMembers.length){alert('데이터를 인식할 수 없습니다.');return;}
+  if(!confirm(newMembers.length+'개 항목을 불러옵니다. 기존 데이터는 초기화됩니다. 계속할까요?'))return;
+  state.members=newMembers;
+  save();
+  document.getElementById('memberPasteResult').textContent='✅ '+newMembers.length+'개 불러오기 완료';
+  renderTable();
 }
 
-// ═══════════════════════════════════════
-// 업체용 — 조회 & 영수증
-// ═══════════════════════════════════════
-function formatReg(el) {
-  let v = el.value.replace(/[^0-9]/g,'');
-  if (v.length>3&&v.length<=5) v=v.slice(0,3)+'-'+v.slice(3);
-  else if (v.length>5) v=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5,10);
+// ═══════════════ 설정 ═══════════════
+function loadSettings(){
+  const o=state.org;
+  document.getElementById('s-name').value=o.name||'';
+  document.getElementById('s-reg').value=o.reg||'';
+  document.getElementById('s-addr').value=o.addr||'';
+  document.getElementById('s-prefix').value=o.prefix||'';
+  document.getElementById('s-event').value=o.event||'';
+  document.getElementById('s-date').value=o.date||'';
+  document.getElementById('s-amount').value=o.amount||'';
+}
+function saveSettings(){
+  const pw=document.getElementById('s-pw').value;
+  state.org.name=document.getElementById('s-name').value;
+  state.org.reg=document.getElementById('s-reg').value;
+  state.org.addr=document.getElementById('s-addr').value;
+  state.org.prefix=document.getElementById('s-prefix').value;
+  state.org.event=document.getElementById('s-event').value;
+  state.org.date=document.getElementById('s-date').value;
+  state.org.amount=Number(document.getElementById('s-amount').value);
+  if(pw)state.org.pw=pw;
+  save();
+  document.getElementById('adminTitle').textContent='어드민 — '+state.org.name;
+  const msg=document.getElementById('saveMsg');
+  msg.textContent='✅ 저장되었습니다';
+  setTimeout(()=>msg.textContent='',2000);
+}
+
+// ═══════════════ 업체 조회 ═══════════════
+function formatReg(el){
+  let v=el.value.replace(/[^0-9]/g,'');
+  if(v.length>3&&v.length<=5)v=v.slice(0,3)+'-'+v.slice(3);
+  else if(v.length>5)v=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5,10);
   el.value=v;
 }
-
-function lookup() {
-  const input = document.getElementById('regInput').value.replace(/-/g,'').trim();
-  const errEl = document.getElementById('errorMsg');
-  errEl.style.display = 'none';
-  if (!input) return;
-
-  const found = state.members.find(p => String(p.reg).replace(/-/g,'') === input);
-  if (!found) {
-    errEl.textContent = '등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요.';
-    errEl.style.display = 'block';
-    return;
-  }
-  if (!found.paid) {
-    errEl.textContent = '아직 입금이 확인되지 않았습니다. 입금 후 담당자에게 문의해 주세요.';
-    errEl.style.display = 'block';
-    return;
-  }
+function lookup(){
+  const input=document.getElementById('regInput').value.replace(/-/g,'').trim();
+  const errEl=document.getElementById('errorMsg');
+  errEl.style.display='none';
+  if(!input)return;
+  const found=state.members.find(p=>String(p.reg).replace(/-/g,'')=== input);
+  if(!found){errEl.textContent='등록된 사업자등록번호가 없습니다. 담당자에게 문의해 주세요.';errEl.style.display='block';return;}
+  if(!found.paid){errEl.textContent='아직 입금이 확인되지 않았습니다. 입금 후 담당자에게 문의해 주세요.';errEl.style.display='block';return;}
   renderReceipt(found);
 }
 
-function renderReceipt(r) {
-  const org = state.org;
-  const today = new Date();
-  const todayStr = today.getFullYear()+'년 '+String(today.getMonth()+1).padStart(2,'0')+'월 '+String(today.getDate()).padStart(2,'0')+'일';
-  const amtFmt = Number(r.amount).toLocaleString('ko-KR');
-
-  document.getElementById('receiptPaper').innerHTML = `
+// ═══════════════ 영수증 렌더링 ═══════════════
+function renderReceipt(r){
+  const org=state.org;
+  const today=new Date();
+  const ts=today.getFullYear()+'년 '+String(today.getMonth()+1).padStart(2,'0')+'월 '+String(today.getDate()).padStart(2,'0')+'일';
+  const af=Number(r.amount).toLocaleString('ko-KR');
+  document.getElementById('receiptPaper').innerHTML=`
     <div class="r-serial-bar"><span class="r-serial-label">일련번호</span><span>${r.serial}</span></div>
     <div class="r-title">참가비 영수증</div>
     <div class="r-sec-head">1. 납부자</div>
@@ -748,27 +734,21 @@ function renderReceipt(r) {
     </table>
     <div class="r-sec-head" style="border-top:1px solid #333">3. 납부내용</div>
     <div class="detail-head"><span>연월일</span><span>세부내용</span><span>금 액</span><span>비 고</span></div>
-    <div class="detail-row"><span>${r.date}</span><span>${r.detail}</span><span>${amtFmt}</span><span>1人 참가비</span></div>
-    <div class="total-row"><span>총 계</span><span>${amtFmt}</span><span></span></div>
+    <div class="detail-row"><span>${r.date}</span><span>${r.detail}</span><span>${af}</span><span>1人 참가비</span></div>
+    <div class="total-row"><span>총 계</span><span>${af}</span><span></span></div>
     <div class="r-confirm">위와 같이 영수하였음을 확인합니다.</div>
-    <div class="r-date">${todayStr}</div>
+    <div class="r-date">${ts}</div>
     <div class="r-issuer"><span>주관처: ${org.name}</span><div class="r-stamp">(인)</div></div>
     <div class="r-receiver">${r.biz} 귀하</div>`;
-
-  document.getElementById('toolbarTitle').textContent = r.biz + ' 영수증';
+  document.getElementById('toolbarTitle').textContent=r.biz+' 영수증';
   hide('lookupPage');
-  document.getElementById('receiptPage').style.display = 'block';
+  document.getElementById('receiptPage').style.display='block';
 }
 
-// ═══════════════════════════════════════
 // 초기화
-// ═══════════════════════════════════════
-window.onload = function() {
-  document.getElementById('modeOrg').textContent = state.org.name;
-  // URL에 ?lookup 파라미터 있으면 바로 조회 화면
-  if (location.search.includes('lookup')) {
-    showLookup();
-  }
+window.onload=function(){
+  document.getElementById('modeOrg').textContent=state.org.name;
+  if(location.search.includes('lookup'))showLookup();
 };
 </script>
 </body>
